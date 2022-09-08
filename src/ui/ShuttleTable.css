@@ -1,0 +1,100 @@
+.eu-table {
+    border-spacing: 0;
+    table-layout: fixed;
+}
+.eu-table-scroller {
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior: contain;
+    background-color: gray;
+}
+
+.eu-table thead th {
+    background-color: #e5e5e5;
+    position: sticky;
+    top: 0;
+    z-index: 1;
+}
+table tbody th {
+    position: relative;
+}
+table thead th:first-child {
+    position: sticky;
+    left: 0;
+    z-index: 2;
+}
+table tbody th {
+    background: #e5e5e5;
+    position: sticky;
+    left: 0;
+    z-index: 1;
+}
+
+.eu-table td, .eu-table th {
+    text-align: center;
+}
+
+.eu-table-datedesc {
+    padding: .3rem 0;
+    font-size: 1.2em;
+}
+
+.eu-table tbody tr:not(.eu-table-padding):hover th {
+    background-color: #f5f5f5;
+}
+
+.eu-table-timecell {
+    width: 55px;
+    min-width: 55px;
+}
+.eu-table-pillcell {
+    width: 120px;
+    min-width: 130px;
+}
+
+.eu-table tbody {
+    margin: 1em 0;
+}
+.eu-table-padding {
+    height: 3em;
+}
+.eu-table-pillcell .eu-pill {
+    margin: .2em .5em;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+}
+.eu-table tr>:nth-child(2) {
+    padding-left: .5em;
+}
+.eu-table tr>:last-child {
+    padding-right: 1em;
+}
+
+.eu-table .eu-pill .eu-color-empty {
+    cursor: not-allowed;
+}
+
+.eu-table-pillcell .eu-pill-itemtitle {
+    font-size: 1em;
+
+}
+.eu-table-pillcell .eu-pill-itemdesc {
+    font-size: .85em;
+    margin-top: -.25rem;
+}
+
+.eu-legend-row {
+    text-align: left !important;
+    color: white;
+    font-size: .9em;
+    text-shadow: 0 0 2px black, 0 0 3px rgba(0, 0, 0, .5);
+    position: sticky;
+    left: 70px;
+}
+.eu-legend-box {
+    display: inline-block;
+    width: .7em;
+    height: .7em;
+    border-radius: 50%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+    margin-left: .75rem;
+}

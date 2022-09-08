@@ -1,0 +1,64 @@
+.eu-shuttle-detail {
+    position: fixed;
+    bottom: 0;
+    left: 50%;
+    width: 100%;
+    max-width: 800px;
+    transform: translateX(-50%);
+    z-index: 52000;
+    max-height: calc(100% - 8em);
+    overflow-y: auto;
+    background-color: white;
+    border-top-left-radius: 1em;
+    border-top-right-radius: 1em;
+    padding: 1em;
+    box-sizing: border-box;
+}
+
+.eu-shuttle-detail>h1 {
+    text-align: center;
+    margin-bottom: 1rem;
+}
+
+.eu-shuttle-detail-row {
+    display: flex;
+    flex-direction: row;
+    place-items: center;
+    margin-bottom: 1.5em;
+}
+
+.eu-shuttle-detail-name {
+    flex: 1 1 0;
+}
+.eu-shuttle-detail-action {
+    flex: 0 0 7.5em;
+    text-align: center;
+    height: 3.5em;
+    border-radius: 1.75em;
+}
+
+.eu-shuttle-detail-action-title {
+    line-height: 2.4rem;
+    font-size: 1.25em;
+}
+.eu-shuttle-detail-action-desc {
+    line-height: 1.1rem;
+    font-size: .85em;
+    margin-top: -.25rem;
+}
+
+.eu-shuttle-detail-action-primary {
+    background-color: green;
+    color: white;
+    cursor: pointer;
+}
+.eu-shuttle-detail-action-danger {
+    background-color: darkred;
+    color: white;
+    cursor: pointer;
+}
+.eu-shuttle-detail-action-disabled {
+    background-color: lightgray;
+    color: black;
+    cursor: not-allowed;
+}

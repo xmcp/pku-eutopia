@@ -1,0 +1,107 @@
+.eu-router {
+    background-color: #fff;
+    height: 100%;
+    width: 100%;
+    overflow-y: auto;
+    overscroll-behavior-y: contain;
+}
+
+.eu-fullscreen-shadow {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, .3);
+    cursor: pointer;
+}
+.eu-drop-shadow {
+    box-shadow: 0 0 20px rgba(0, 0, 0, .4);
+}
+.eu-paper {
+    background-color: white;
+    padding: .5em;
+    box-sizing: border-box;
+    overflow-y: auto;
+}
+.eu-paper, .eu-table-scroller {
+    height: calc(100% - 3.5em);
+}
+
+.eu-title {
+    margin: 0;
+    padding: .5rem;
+    font-size: 1.5rem;
+}
+
+.eu-router-panel {
+    position: fixed;
+    bottom: 0;
+    height: 3.5em;
+    width: 100%;
+
+    display: flex;
+    flex-direction: row;
+    background-color: #f5f5f5;
+    place-items: center;
+}
+.eu-router-panel .eu-pill {
+    flex: 1 1 0;
+    margin: 0 .5em;
+    line-height: 1.75em;
+}
+
+.eu-pill {
+    margin: .15em;
+    display: flex;
+    flex-direction: row;
+    cursor: pointer;
+    border-radius: .5em;
+}
+.eu-pill>* {
+    flex: 1 1 4em;
+}
+.eu-pill-item {
+    text-align: center;
+    padding: .2em 0;
+    border-top: 1px solid black;
+    border-left: 1px solid black;
+    border-bottom: 1px solid black;
+}
+.eu-pill-item:first-child {
+    border-top-left-radius: .5em;
+    border-bottom-left-radius: .5em;
+}
+.eu-pill-item:last-child {
+    border-top-right-radius: .5em;
+    border-bottom-right-radius: .5em;
+    border-right: 1px solid black;
+}
+
+.eu-router-panel .eu-pill-item-about {
+    flex: 1 1 2em;
+}
+.eu-router-panel .eu-pill-item-selected {
+    background-color: black;
+    color: white;
+}
+
+.eu-color-picked {
+    background-color: green;
+    color: white;
+}
+.eu-color-available {
+    background-color: white;
+    color: black;
+}
+.eu-color-full {
+    background-color: lightpink;
+    color: black;
+}
+.eu-color-disabled {
+    background-color: darkgray;
+    color: black;
+}
+.eu-color-empty {
+    background-color: gray;
+}

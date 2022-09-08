@@ -1,0 +1,37 @@
+.eu-resitem {
+    margin: 1em 0;
+    display: flex;
+    flex-direction: row;
+    place-items: center;
+    padding: .5em;
+    border-radius: .5em;
+}
+
+.eu-resitem-desc {
+    flex: 1 1 0;
+    padding-left: .5em;
+}
+.eu-resitem-action {
+    flex: 0 0 4.5em;
+    font-weight: bold;
+    text-align: center;
+}
+
+.eu-resitem-primary {
+    cursor: pointer;
+    background-color: darkblue;
+    border: 1px solid black;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    color: white;
+}
+.eu-resitem-danger {
+    cursor: pointer;
+    background-color: lightpink;
+    border: 1px solid darkred;
+    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    color: black;
+}
+.eu-resitem-disabled {
+    border: 1px solid darkgrey;
+    color: black;
+}
