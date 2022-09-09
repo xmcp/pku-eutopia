@@ -1,5 +1,10 @@
+import {str_count} from '../utils';
+
 export function parse_period_text(t) {
-    if(t.count(':')!==1) // probably multiple time
+    if((typeof t)!=='string')
+        return null;
+
+    if(str_count(t, ':')!==1) // probably multiple time
         return null;
 
     let d = new Date(t.trim().replace(' ', 'T') + '+0800');
@@ -25,7 +30,7 @@ export function reservation_status(r) {
 
         let sign_time = +d;
         let cur_time = +new Date();
-        if(cur_time > sign_time + 16*60*1000)
+        if(cur_time > sign_time + 41*60*1000)
             return 'finished_absent';
         else if(cur_time > sign_time - 16*60*1000)
             return 'pending_signable';
@@ -36,13 +41,26 @@ export function reservation_status(r) {
         return `((${r.status_name}))`;
 }
 
+window._res_id_set = null;
+export function got_res_id() {
+    return window._res_id_set!==null;
+}
+function save_res_id(s) {
+    window._res_id_set = s;
+}
+
 export function parse_reservation(d_shuttles, d_reservations) {
-    // collect resource ids
+    // collect resource ids so we know what are tracks
 
-    let res_id = new Set();
+    let res_id = window._res_id_set;
 
-    for(let track of d_shuttles)
-        res_id.add(track.id);
+    if(res_id===null) {
+        res_id = new Set();
+        for(let track of d_shuttles)
+            res_id.add(track.id);
+
+        save_res_id(res_id);
+    }
 
     // collect and categorize
 

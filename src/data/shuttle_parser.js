@@ -1,10 +1,10 @@
 import {to_yyyymmdd} from '../utils';
 import {reservation_status} from './reservation_parser';
+import {useContext} from 'react';
+import {ConfigCtx} from './config_ctx';
 
-export let DIR_KEYS_LIST = ['come', 'back'];
-export let DIR_KEYS_DESC_SHORT = {come: '去', back: '回'};
-export let DIR_KEYS_DESC_LONG = {come: '去燕园', back: '回昌平'};
-let DIR_KEYS_FROM_API = {'昌平->燕园': 'come', '燕园->昌平': 'back'};
+export let DIR_KEYS_LIST = ['toyy', 'tocp'];
+let DIR_KEYS_FROM_API = {'昌平->燕园': 'toyy', '燕园->昌平': 'tocp'};
 
 let STATUS_DESC = {
     0: '已过期',
@@ -37,6 +37,26 @@ function filter_dates(ds) {
         whitelist.add(to_yyyymmdd(new Date(today_ts + delta*86400*1000)));
 
     return Array.from(ds).filter((s)=>whitelist.has(s));
+}
+
+export function DescribeDirectionShort({dir}) {
+    let {config} = useContext(ConfigCtx);
+
+    return (
+        config.location==='yy' ?
+            {toyy: '回', tocp: '去'} :
+            {toyy: '去', tocp: '回'}
+    )[dir] || `((${dir}))`;
+}
+
+export function DescribeDirectionLong({dir}) {
+    let {config} = useContext(ConfigCtx);
+
+    return (
+        config.location==='yy' ?
+            {toyy: '回燕园', tocp: '去昌平'} :
+            {toyy: '去燕园', tocp: '回昌平'}
+    )[dir] || `((${dir}))`;
 }
 
 export function parse_shuttle(d_shuttles, d_reservations) {

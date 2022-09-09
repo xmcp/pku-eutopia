@@ -6,11 +6,11 @@
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior: contain;
-    background-color: gray;
+    background-color: #ccc;
 }
 
 .eu-table thead th {
-    background-color: #e5e5e5;
+    background-color: #e3e3e3;
     position: sticky;
     top: 0;
     z-index: 1;
@@ -24,7 +24,7 @@ table thead th:first-child {
     z-index: 2;
 }
 table tbody th {
-    background: #e5e5e5;
+    background: #e3e3e3;
     position: sticky;
     left: 0;
     z-index: 1;
@@ -35,12 +35,12 @@ table tbody th {
 }
 
 .eu-table-datedesc {
-    padding: .3rem 0;
+    padding: .3em 0;
     font-size: 1.2em;
 }
 
-.eu-table tbody tr:not(.eu-table-padding):hover th {
-    background-color: #f5f5f5;
+.eu-table tbody tr:not(.eu-table-padding-top):not(.eu-table-padding-bottom):hover th {
+    background-color: #f7f7f7;
 }
 
 .eu-table-timecell {
@@ -55,12 +55,15 @@ table tbody th {
 .eu-table tbody {
     margin: 1em 0;
 }
-.eu-table-padding {
-    height: 3em;
+.eu-table-padding-top {
+    height: 2em;
+}
+.eu-table-padding-bottom {
+    height: 5em;
 }
 .eu-table-pillcell .eu-pill {
     margin: .2em .5em;
-    box-shadow: 0 0 5px rgba(0, 0, 0, .3);
+    box-shadow: 0 0 3px rgba(0, 0, 0, .3);
 }
 .eu-table tr>:nth-child(2) {
     padding-left: .5em;
@@ -79,14 +82,14 @@ table tbody th {
 }
 .eu-table-pillcell .eu-pill-itemdesc {
     font-size: .85em;
-    margin-top: -.25rem;
+    margin-top: -.25em;
 }
 
 .eu-legend-row {
     text-align: left !important;
-    color: white;
+    color: black;
     font-size: .9em;
-    text-shadow: 0 0 2px black, 0 0 3px rgba(0, 0, 0, .5);
+    text-shadow: 0 0 1px white, 0 0 2px white, 0 0 3px white;
     position: sticky;
     left: 70px;
 }
@@ -95,6 +98,26 @@ table tbody th {
     width: .7em;
     height: .7em;
     border-radius: 50%;
-    box-shadow: 0 0 3px rgba(0, 0, 0, .5);
-    margin-left: .75rem;
+    box-shadow: 0 0 2px rgba(0, 0, 0, .6);
+    margin-left: .8em;
+}
+
+.eu-color-picked {
+    background-color: darkblue;
+    color: white;
+}
+.eu-color-available {
+    background-color: white;
+    color: black;
+}
+.eu-color-full {
+    background-color: lightpink;
+    color: black;
+}
+.eu-color-disabled {
+    background-color: #c0c0c0;
+    color: black;
+}
+.eu-color-empty {
+    background-color: #c0c0c0;
 }

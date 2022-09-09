@@ -25,29 +25,29 @@
     overflow-y: auto;
 }
 .eu-paper, .eu-table-scroller {
-    height: calc(100% - 3.5em);
+    height: calc(100% - 3em);
 }
 
 .eu-title {
     margin: 0;
-    padding: .5rem;
-    font-size: 1.5rem;
+    padding: .4em .2em;
+    font-size: 1.5em;
 }
 
 .eu-router-panel {
     position: fixed;
     bottom: 0;
-    height: 3.5em;
+    height: 3em;
     width: 100%;
 
     display: flex;
     flex-direction: row;
-    background-color: #f5f5f5;
+    background-color: #f7f7f7;
     place-items: center;
 }
 .eu-router-panel .eu-pill {
     flex: 1 1 0;
-    margin: 0 .5em;
+    margin: 0 .25em;
     line-height: 1.75em;
 }
 
@@ -84,24 +84,4 @@
 .eu-router-panel .eu-pill-item-selected {
     background-color: black;
     color: white;
-}
-
-.eu-color-picked {
-    background-color: green;
-    color: white;
-}
-.eu-color-available {
-    background-color: white;
-    color: black;
-}
-.eu-color-full {
-    background-color: lightpink;
-    color: black;
-}
-.eu-color-disabled {
-    background-color: darkgray;
-    color: black;
-}
-.eu-color-empty {
-    background-color: gray;
 }

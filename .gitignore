@@ -1,5 +1,6 @@
 node_modules
-mocked_*.json
+/public/mock
 /.idea
 build
 npm-debug.log*
+/userscript/index.html

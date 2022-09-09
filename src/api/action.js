@@ -44,5 +44,5 @@ export async function revoke(res_id) {
 }
 
 export async function signin(id) {
-    window.open('https://process-443.w.pku点edu.cn/v2/reserve/m_signIn?id='+encodeURIComponent(id));
+    window.open('/v2/reserve/m_signIn?id='+encodeURIComponent(id));
 }

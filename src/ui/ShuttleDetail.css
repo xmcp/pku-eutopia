@@ -17,7 +17,7 @@
 
 .eu-shuttle-detail>h1 {
     text-align: center;
-    margin-bottom: 1rem;
+    margin-bottom: .7em;
 }
 
 .eu-shuttle-detail-row {
@@ -35,20 +35,21 @@
     text-align: center;
     height: 3.5em;
     border-radius: 1.75em;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .5);
 }
 
 .eu-shuttle-detail-action-title {
-    line-height: 2.4rem;
+    line-height: 2em;
     font-size: 1.25em;
 }
 .eu-shuttle-detail-action-desc {
-    line-height: 1.1rem;
+    line-height: 1em;
     font-size: .85em;
-    margin-top: -.25rem;
+    margin-top: -.25em;
 }
 
 .eu-shuttle-detail-action-primary {
-    background-color: green;
+    background-color: darkblue;
     color: white;
     cursor: pointer;
 }
@@ -61,4 +62,5 @@
     background-color: lightgray;
     color: black;
     cursor: not-allowed;
+    box-shadow: unset;
 }

@@ -1,4 +1,4 @@
-import {DIR_KEYS_LIST, DIR_KEYS_DESC_SHORT} from '../data/shuttle_parser';
+import {DIR_KEYS_LIST, DescribeDirectionShort} from '../data/shuttle_parser';
 import {useState} from 'react';
 import {ShuttleDetail} from './ShuttleDetail';
 
@@ -62,7 +62,7 @@ function CellDescriptor({celldesc, open_detail}) {
                 key={dir} onClick={()=>open_detail(tracks)}
                 className={'eu-pill-item eu-color-'+(picked ? 'picked' : available ? 'available' : (!passed && tot_left===0) ? 'full' : 'disabled')}
             >
-                <div className="eu-pill-itemtitle">{DIR_KEYS_DESC_SHORT[dir]}</div>
+                <div className="eu-pill-itemtitle"><DescribeDirectionShort dir={dir} /></div>
                 <div className="eu-pill-itemdesc">{tot_left}</div>
             </div>
         );
@@ -77,9 +77,6 @@ function CellDescriptor({celldesc, open_detail}) {
 
 export function ShuttleTable({data}) {
     let [detail, set_detail] = useState(null);
-
-    if(data===null)
-        return null;
 
     return (<>
         <div className="eu-width-container eu-drop-shadow" style={{height: '100%'}}>
@@ -96,15 +93,8 @@ export function ShuttleTable({data}) {
                         </tr>
                     </thead>
                     <tbody>
-                        <tr className="eu-table-padding">
+                        <tr className="eu-table-padding-top">
                             <th className="eu-table-timecell" />
-                            <td colSpan={2} className="eu-legend-row">
-                                <span className="eu-legend-box eu-color-available" /> 可预约
-                                <span className="eu-legend-box eu-color-picked" /> 已预约
-                                <span className="eu-legend-box eu-color-full" /> 已约满
-                                <span className="eu-legend-box eu-color-disabled" /> 已过期
-                            </td>
-                            <td></td> {/* <- last-child gets `padding-right: 1em` */}
                         </tr>
                         {data.time_keys.map(time=>
                             <tr key={time}>
@@ -119,8 +109,15 @@ export function ShuttleTable({data}) {
                                 )}
                             </tr>
                         )}
-                        <tr className="eu-table-padding">
+                        <tr className="eu-table-padding-bottom">
                             <th className="eu-table-timecell" />
+                            <td colSpan={2} className="eu-legend-row">
+                                <span className="eu-legend-box eu-color-available" /> 可预约
+                                <span className="eu-legend-box eu-color-picked" /> 已预约
+                                <span className="eu-legend-box eu-color-full" /> 已约满
+                                <span className="eu-legend-box eu-color-disabled" /> 已过期
+                            </td>
+                            <td></td> {/* <- last-child gets `padding-right: 1em` */}
                         </tr>
                     </tbody>
                 </table>

@@ -15,6 +15,14 @@ export const DataCtx = createContext({
     reload_all: ()=>{},
 });
 
+export function with_fallback(d) {
+    return d===null || d===SYMBOL_FAILED ? [] : d;
+}
+
+export function loaded(d) {
+    return d!==null && d!==SYMBOL_FAILED;
+}
+
 export function DataProvider({children}) {
     let [shuttle_thisweek, set_shuttle_thisweek] = useState(null);
     let [shuttle_nextweek, set_shuttle_nextweek] = useState(null);
@@ -24,6 +32,7 @@ export function DataProvider({children}) {
     let [loading, set_loading] = useState(false);
 
     async function reload(promise, setter, label) {
+        setter(null);
         try {
             let list = await promise;
             console.log('loaded', label, list);
@@ -35,15 +44,12 @@ export function DataProvider({children}) {
         } catch(e) {
             console.error(e);
             setter((d)=>d ? d : SYMBOL_FAILED);
-            set_last_update(u => ({
-                ...u,
-                [label]: null,
-            }));
         }
     }
 
     const reload_all = useCallback(()=>{
         set_loading(true);
+        set_last_update({});
         Promise.allSettled([
             reload(get_list_shuttle(0), set_shuttle_thisweek, 'shuttle_thisweek'),
             reload(get_list_shuttle(1), set_shuttle_nextweek, 'shuttle_nextweek'),

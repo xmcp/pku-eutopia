@@ -1,7 +1,7 @@
 import {useState, useContext} from 'react';
 
 import {revoke, signin} from '../api/action';
-import {DataCtx} from '../data/ctx';
+import {DataCtx} from '../data/data_ctx';
 
 import './ReservationView.css';
 
@@ -29,14 +29,14 @@ function ReservationItem({r}) {
         action_text = '签到';
     }
 
-    function wrapped(action, target, fn) {
+    function wrapped(action, target, fn, need_confirm) {
         return async ()=>{
             if(loading)
                 return;
             if(fn===null)
                 return;
 
-            if(window.confirm(`要【${action}】${target} 的班车吗？`)) {
+            if(!need_confirm || window.confirm(`要【${action}】${target} 的班车吗？`)) {
                 set_loading(true);
                 try {
                     await fn();
@@ -51,7 +51,7 @@ function ReservationItem({r}) {
     }
 
     return (
-        <div className={'eu-resitem eu-resitem-'+action_semantic} onClick={wrapped(action_text, r.datetime, action_cmd)}>
+        <div className={'eu-resitem eu-resitem-'+action_semantic} onClick={wrapped(action_text, r.datetime, action_cmd, action_semantic==='danger')}>
             <div className="eu-resitem-desc">
                 <div style={{fontSize: '1.1em', fontWeight: 'bold'}}>{r.datetime}</div>
                 <div>#{r.track_id}：{r.track_name}</div>

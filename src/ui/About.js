@@ -1,5 +1,6 @@
-import {SYMBOL_FAILED, DataCtx} from '../data/ctx';
+import {SYMBOL_FAILED, DataCtx} from '../data/data_ctx';
 import {useContext} from 'react';
+import {ConfigCtx} from '../data/config_ctx';
 
 function LastUpdate({d}) {
     if(d===null)
@@ -27,6 +28,30 @@ const MOTD = {
     ]
 }
 
+function Preference() {
+    let {config, update_config} = useContext(ConfigCtx);
+
+    return (<>
+        <p><b>
+            我常住在{' '}
+            <select value={config.location} onInput={(e)=>update_config({
+                ...config,
+                location: e.target.value,
+            })}>
+                <option value="yy">燕园</option>
+                <option value="cp">昌平</option>
+            </select>
+            {' '}校区
+        </b></p>
+        <p>
+            班车方向将显示为
+            “<b>{config.location==='yy' ? '回' : '去'}</b>燕园”
+            和
+            “<b>{config.location==='yy' ? '去' : '回'}</b>昌平”
+        </p>
+    </>);
+}
+
 export function About() {
     let data = useContext(DataCtx);
 
@@ -42,8 +67,11 @@ export function About() {
                 <p>「{MOTD.list[MOTD.index]}」——《Eutopia》</p>
                 <br />
 
+                <h1 className="eu-title">偏好设置</h1>
+                <Preference />
+
                 <h1 className="eu-title">数据状态</h1>
-                {!!window.EUTOPIA_USE_MOCK &&
+                {!!(window.EUTOPIA_USE_MOCK && process.env.NODE_ENV!=='production') &&
                     <p><b>USING MOCK DATA.</b></p>
                 }
                 <p>
