@@ -2,7 +2,7 @@
 
 **班车预约 for Humans™**
 
-班车预约系统重置版：快速约车，一键签到，功能整合，界面易用
+班车预约系统重制版：快速约车，一键签到，功能整合，界面易用
 
 ![screenshot](media/screenshot.png)
 
@@ -28,3 +28,4 @@ PC 用户推荐使用 [Tampermonkey](https://www.tampermonkey.net/)，iOS / macO
 
 ## 开放源代码
 
+[xmcp/pku-eutopia](https://github.com/xmcp/pku-eutopia)，按 MIT 协议开源。

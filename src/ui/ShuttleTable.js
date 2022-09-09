@@ -1,5 +1,7 @@
+import {useState, useContext} from 'react';
+
 import {DIR_KEYS_LIST, DescribeDirectionShort} from '../data/shuttle_parser';
-import {useState} from 'react';
+import {ConfigCtx} from '../data/config_ctx';
 import {ShuttleDetail} from './ShuttleDetail';
 
 import './ShuttleTable.css';
@@ -26,6 +28,8 @@ function DateDescriptor({date_str}) {
 }
 
 function CellDescriptor({celldesc, open_detail}) {
+    let {config} = useContext(ConfigCtx);
+
     if(celldesc===null)
         return null;
 
@@ -42,6 +46,7 @@ function CellDescriptor({celldesc, open_detail}) {
         let picked = false;
         let available = false;
         let tot_left = 0;
+        let tot_picked = 0;
         let passed = false;
 
         for(let track of tracks) {
@@ -55,6 +60,7 @@ function CellDescriptor({celldesc, open_detail}) {
                 passed = true;
 
             tot_left += track.left;
+            tot_picked += track.capacity - track.left;
         }
 
         dirs.push(
@@ -63,7 +69,9 @@ function CellDescriptor({celldesc, open_detail}) {
                 className={'eu-pill-item eu-color-'+(picked ? 'picked' : available ? 'available' : (!passed && tot_left===0) ? 'full' : 'disabled')}
             >
                 <div className="eu-pill-itemtitle"><DescribeDirectionShort dir={dir} /></div>
-                <div className="eu-pill-itemdesc">{tot_left}</div>
+                <div className="eu-pill-itemdesc">
+                    {config.showtext==='picked' ? tot_picked : tot_left}
+                </div>
             </div>
         );
     }

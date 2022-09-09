@@ -32,23 +32,34 @@ function Preference() {
     let {config, update_config} = useContext(ConfigCtx);
 
     return (<>
-        <p><b>
-            我常住在{' '}
-            <select value={config.location} onInput={(e)=>update_config({
-                ...config,
-                location: e.target.value,
-            })}>
-                <option value="yy">燕园</option>
-                <option value="cp">昌平</option>
-            </select>
-            {' '}校区
-        </b></p>
         <p>
+            <b>
+                我常住在{' '}
+                <select value={config.location} onInput={(e)=>update_config({
+                    ...config,
+                    location: e.target.value,
+                })}>
+                    <option value="yy">燕园</option>
+                    <option value="cp">昌平</option>
+                </select>
+                {' '}校区，
+            </b>
             班车方向将显示为
             “<b>{config.location==='yy' ? '回' : '去'}</b>燕园”
             和
             “<b>{config.location==='yy' ? '去' : '回'}</b>昌平”
         </p>
+        <p><b>
+            在界面上显示班车的{' '}
+            <select value={config.showtext} onInput={(e)=>update_config({
+                ...config,
+                showtext: e.target.value,
+            })}>
+                <option value="left">剩余位置</option>
+                <option value="picked">已约位置</option>
+            </select>
+            {' '}数量
+        </b></p>
     </>);
 }
 
@@ -96,7 +107,10 @@ export function About() {
                 </p>
                 <br />
 
-                <p>Build {process.env.REACT_APP_BUILD_INFO||'---'}</p>
+                <p>
+                    <a href="https://github.com/xmcp/pku-eutopia" target="_blank" rel="noreferrer noopener">在 GitHub 开源</a>，
+                    Build {process.env.REACT_APP_BUILD_INFO||'---'}
+                </p>
                 <br />
             </div>
         </div>

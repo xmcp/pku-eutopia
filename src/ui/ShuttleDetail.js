@@ -1,9 +1,11 @@
+import {useState, useContext} from 'react';
+
 import {DescribeDirectionLong} from '../data/shuttle_parser';
 import {reserve, revoke, signin} from '../api/action';
+import {DataCtx} from '../data/data_ctx';
+import {ConfigCtx} from '../data/config_ctx';
 
 import './ShuttleDetail.css';
-import {useState, useContext} from 'react';
-import {DataCtx} from '../data/data_ctx';
 
 function TitleFormatter({cell}) {
     return (<>
@@ -13,6 +15,7 @@ function TitleFormatter({cell}) {
 
 export function ShuttleDetail({cells, close}) {
     let data = useContext(DataCtx);
+    let {config} = useContext(ConfigCtx);
     let [loading, set_loading] = useState(false);
 
     if(cells.length===0)
@@ -102,7 +105,10 @@ export function ShuttleDetail({cells, close}) {
                             onClick={wrapped(action_text, cell.track_name, action_cmd, action_semantic==='danger')}
                         >
                             <div className="eu-shuttle-detail-action-title">{action_text}</div>
-                            <div className="eu-shuttle-detail-action-desc">剩余 {cell.left} / {cell.capacity}</div>
+                            <div className="eu-shuttle-detail-action-desc">
+                                {config.showtext==='picked' ? <>已约 {cell.capacity - cell.left}</> : <>剩余 {cell.left}</>}
+                                {' / '}{cell.capacity}
+                            </div>
                         </div>
                     </div>
                 );
