@@ -4,11 +4,11 @@ import {DataProvider, DataCtx, with_fallback, loaded, SYMBOL_FAILED} from '../da
 import {parse_shuttle} from '../data/shuttle_parser';
 import {ShuttleTable} from './ShuttleTable';
 import {ReservationView} from './ReservationView';
+import {parse_reservation, got_res_id} from '../data/reservation_parser';
+import {ConfigProvider} from '../data/config_ctx';
 import {About} from './About';
 
 import './App.css';
-import {parse_reservation, got_res_id} from '../data/reservation_parser';
-import {ConfigProvider} from '../data/config_ctx';
 
 function Skeleton() {
     return (

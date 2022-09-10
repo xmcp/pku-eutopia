@@ -1,5 +1,6 @@
-import {SYMBOL_FAILED, DataCtx} from '../data/data_ctx';
 import {useContext} from 'react';
+
+import {SYMBOL_FAILED, DataCtx} from '../data/data_ctx';
 import {ConfigCtx} from '../data/config_ctx';
 
 function LastUpdate({d}) {
@@ -42,12 +43,14 @@ function Preference() {
                     <option value="yy">燕园</option>
                     <option value="cp">昌平</option>
                 </select>
-                {' '}校区，
+                {' '}校区
             </b>
-            班车方向将显示为
+            <br />
+            （班车方向将显示为
             “<b>{config.location==='yy' ? '回' : '去'}</b>燕园”
             和
             “<b>{config.location==='yy' ? '去' : '回'}</b>昌平”
+            ）
         </p>
         <p><b>
             在界面上显示班车的{' '}
@@ -75,11 +78,13 @@ export function About() {
                 <br />
 
                 <h1 className="eu-title">Project Eutopia by @xmcp</h1>
-                <p>「{MOTD.list[MOTD.index]}」——《Eutopia》</p>
+                <p>班车预约 for Humans™</p>
+                <p><i>「{MOTD.list[MOTD.index]}」——《Eutopia》</i></p>
                 <br />
 
                 <h1 className="eu-title">偏好设置</h1>
                 <Preference />
+                <br />
 
                 <h1 className="eu-title">数据状态</h1>
                 {!!(window.EUTOPIA_USE_MOCK && process.env.NODE_ENV!=='production') &&
@@ -108,7 +113,8 @@ export function About() {
                 <br />
 
                 <p>
-                    <a href="https://github.com/xmcp/pku-eutopia" target="_blank" rel="noreferrer noopener">在 GitHub 开源</a>，
+                    <a href="https://github.com/xmcp/pku-eutopia" target="_blank" rel="noreferrer noopener">在 GitHub 以 MIT 协议开源</a>
+                    <br />
                     Build {process.env.REACT_APP_BUILD_INFO||'---'}
                 </p>
                 <br />

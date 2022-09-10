@@ -1,6 +1,7 @@
+import {useContext} from 'react';
+
 import {to_yyyymmdd} from '../utils';
 import {reservation_status} from './reservation_parser';
-import {useContext} from 'react';
 import {ConfigCtx} from './config_ctx';
 
 export let DIR_KEYS_LIST = ['toyy', 'tocp'];
@@ -30,7 +31,7 @@ function time_key(s) { // hh:mm
 function filter_dates(ds) {
     //return Array.from(ds); /////
 
-    let today_ts = +(new Date());
+    let today_ts = window.EUTOPIA_USE_MOCK ? +(new Date('2022-09-08')) :  +(new Date());
 
     let whitelist = new Set();
     for(let delta = -1; delta<=7; delta++)
