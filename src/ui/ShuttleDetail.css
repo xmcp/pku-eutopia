@@ -29,6 +29,7 @@
 
 .eu-shuttle-detail-name {
     flex: 1 1 0;
+    padding-right: .5em;
 }
 .eu-shuttle-detail-action {
     flex: 0 0 7.5em;

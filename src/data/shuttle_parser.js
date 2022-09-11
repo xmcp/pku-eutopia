@@ -1,8 +1,8 @@
 import {useContext} from 'react';
 
 import {to_yyyymmdd} from '../utils';
-import {reservation_status} from './reservation_parser';
 import {ConfigCtx} from './config_ctx';
+import {reservation_status, normalize_track_name} from './common';
 
 export let DIR_KEYS_LIST = ['toyy', 'tocp'];
 let DIR_KEYS_FROM_API = {'昌平->燕园': 'toyy', '燕园->昌平': 'tocp'};
@@ -103,7 +103,7 @@ export function parse_shuttle(d_shuttles, d_reservations) {
                     let reservation = (reserved[point.date+' '+point.yaxis] || {})[track.id] || null;
                     let cell = {
                         track_id: track.id,
-                        track_name: track.name,
+                        track_name: normalize_track_name(track.name),
 
                         capacity: point.row.total,
                         left: point.row.margin,
