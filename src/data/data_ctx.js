@@ -12,7 +12,7 @@ export const DataCtx = createContext({
 
     loading: false,
     last_update: {},
-    reload_all: ()=>{},
+    reload_all: (_soft=false)=>{},
 });
 
 export function with_fallback(d) {
@@ -31,8 +31,10 @@ export function DataProvider({children}) {
     let [last_update, set_last_update] = useState({});
     let [loading, set_loading] = useState(false);
 
-    async function reload(promise, setter, label) {
-        setter(null);
+    async function reload(promise, setter, label, soft) {
+        if(!soft)
+            setter(null);
+
         try {
             let list = await promise;
             console.log('loaded', label, list);
@@ -43,17 +45,24 @@ export function DataProvider({children}) {
             }));
         } catch(e) {
             console.error(e);
-            setter((d)=>d ? d : SYMBOL_FAILED);
+            setter(SYMBOL_FAILED);
+            set_last_update(u => ({
+                ...u,
+                [label]: null,
+            }));
         }
     }
 
-    const reload_all = useCallback(()=>{
+    const reload_all = useCallback((soft=false)=>{
+        console.log('reload_all', soft);
+
         set_loading(true);
         set_last_update({});
+
         Promise.allSettled([
-            reload(get_list_shuttle(0), set_shuttle_thisweek, 'shuttle_thisweek'),
-            reload(get_list_shuttle(1), set_shuttle_nextweek, 'shuttle_nextweek'),
-            reload(get_list_reservation(), set_reservation, 'reservation'),
+            reload(get_list_shuttle(0), set_shuttle_thisweek, 'shuttle_thisweek', soft),
+            reload(get_list_shuttle(1), set_shuttle_nextweek, 'shuttle_nextweek', soft),
+            reload(get_list_reservation(), set_reservation, 'reservation', soft),
         ])
             .then(()=>{
                 set_loading(false);

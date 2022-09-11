@@ -40,7 +40,7 @@ function ReservationItem({r}) {
                 set_loading(true);
                 try {
                     await fn();
-                    data.reload_all();
+                    data.reload_all(true);
                 } catch(e) {
                     console.error(e);
                     window.alert(`${action}失败，${e}`);

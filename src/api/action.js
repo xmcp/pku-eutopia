@@ -1,4 +1,12 @@
+import {sleep, randint} from '../utils';
+
 export async function reserve(track_id, date_str, time_id) {
+    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+        console.log('mocking reserve', track_id, date_str, time_id);
+        await sleep(500+randint(500));
+        return;
+    }
+
     let res = await fetch('/site/reservation/launch', {
         method: 'POST',
         headers: {
@@ -21,10 +29,16 @@ export async function reserve(track_id, date_str, time_id) {
     if(data.e!==0)
         throw new Error(`${data.e}: ${data.m}`);
 
-    window.alert(data.m);
+    //window.alert(data.m);
 }
 
 export async function revoke(res_id) {
+    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+        console.log('mocking revoke', res_id);
+        await sleep(500+randint(500));
+        return;
+    }
+
     let res = await fetch('/site/reservation/update-state', {
         method: 'POST',
         headers: {
@@ -40,9 +54,10 @@ export async function revoke(res_id) {
     if(data.e!==0)
         throw new Error(`${data.e}: ${data.m}`);
 
-    window.alert(data.m);
+    //window.alert(data.m);
 }
 
 export async function signin(id) {
     window.open('/v2/reserve/m_signIn?id='+encodeURIComponent(id));
+    await sleep(1000); // reload data after popup is fully loaded
 }

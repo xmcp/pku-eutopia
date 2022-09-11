@@ -15,6 +15,15 @@
     word-wrap: break-word;
 }
 
+#eu-root a {
+    color: #00c;
+    text-decoration: none;
+}
+#eu-root a:hover {
+    border-bottom: 1px solid #00c;
+    margin-bottom: -1px;
+}
+
 .eu-width-container {
     width: 100%;
     max-width: 800px;

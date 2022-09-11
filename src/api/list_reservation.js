@@ -4,7 +4,7 @@ export async function get_list_reservation() {
     let res = null;
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
         console.log('mocking list_reservation');
-        await sleep(500+randint(1500));
+        await sleep(1000+randint(1000));
 
         res = await fetch('/mock/mocked_list_reservation.json');
     }

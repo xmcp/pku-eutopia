@@ -59,14 +59,17 @@ function Router() {
     let loaded_cnt = 0;
     let has_failure = false;
 
+    for(let d of Object.values(data.last_update)) {
+        if(d)
+            loaded_cnt++;
+    }
+
     for(let d of [
         data.shuttle_thisweek,
         data.shuttle_nextweek,
         data.reservation,
     ]) {
-        if(loaded(d))
-            loaded_cnt++;
-        else if(d===SYMBOL_FAILED)
+        if(d===SYMBOL_FAILED)
             has_failure = true;
     }
 

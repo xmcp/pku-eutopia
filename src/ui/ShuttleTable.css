@@ -6,11 +6,11 @@
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior: contain;
-    background-color: #f0f0f0;
+    background-color: #ececec;
 }
 
 .eu-table thead th {
-    background-color: #f0f0f0;
+    background-color: #ececec;
     position: sticky;
     top: 0;
     z-index: 3;
@@ -24,7 +24,7 @@ table thead th:first-child {
     z-index: 2;
 }
 table tbody th {
-    background-color: #f0f0f0;
+    background-color: #ececec;
     position: sticky;
     left: 0;
     z-index: 1;
@@ -115,9 +115,9 @@ table tbody th {
     color: black;
 }
 .eu-color-disabled {
-    background-color: #e8e8e8;
+    background-color: #e4e4e4;
     color: black;
 }
 .eu-color-empty {
-    background-color: #e8e8e8;
+    background-color: #e4e4e4;
 }

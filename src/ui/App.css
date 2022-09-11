@@ -37,6 +37,7 @@
 .eu-router-panel {
     position: fixed;
     bottom: 0;
+    left: 0;
     height: 3em;
     width: 100%;
 

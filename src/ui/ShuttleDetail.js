@@ -75,7 +75,7 @@ export function ShuttleDetail({cells, close}) {
                 try {
                     await fn();
                     close();
-                    data.reload_all();
+                    data.reload_all(true);
                 } catch(e) {
                     console.error(e);
                     window.alert(`${action}失败，${e}`);

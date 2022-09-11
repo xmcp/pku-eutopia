@@ -106,17 +106,21 @@ export function About() {
                     ，最后更新于 <LastUpdate d={data.last_update['shuttle_nextweek'] || null} />
                 </p>
                 <p>
-                    <button style={{minWidth: '8em', fontSize: '1.25em'}} onClick={data.reload_all} disabled={data.loading}>
+                    <button style={{minWidth: '8em', fontSize: '1.25em'}} onClick={()=>data.reload_all(false)} disabled={data.loading}>
                         {data.loading ? '正在加载' : '更新数据'}
                     </button>
                 </p>
                 <br />
 
+                <h1 className="eu-title">链接</h1>
                 <p>
-                    <a href="https://github.com/xmcp/pku-eutopia" target="_blank" rel="noreferrer noopener">在 GitHub 以 MIT 协议开源</a>
-                    <br />
-                    Build {process.env.REACT_APP_BUILD_INFO||'---'}
+                    <a href="/v2/matter/start?id=475" target="_blank" rel="noreferrer noopener">班车申诉表单</a>
+                    {' / '}
+                    <a href="https://github.com/xmcp/pku-eutopia" target="_blank" rel="noreferrer noopener">在 GitHub 开源</a>
+                    {' / '}
+                    <a href="https://xmcp.ltd/donate.png" target="_blank" rel="noreferrer noopener">V 我 50</a>
                 </p>
+                <p>Build {process.env.REACT_APP_BUILD_INFO||'---'}</p>
                 <br />
             </div>
         </div>

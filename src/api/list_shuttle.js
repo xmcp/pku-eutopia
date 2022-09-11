@@ -17,7 +17,7 @@ export async function get_list_shuttle(week_delta) {
     let res = null;
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
         console.log('mocking list_shuttle', week_delta);
-        await sleep(500+randint(1500));
+        await sleep(1000+randint(1000));
 
         if(week_delta===0)
             res = await fetch('/mock/mocked_list_shuttle_thisweek.json');
