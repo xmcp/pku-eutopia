@@ -137,9 +137,27 @@ export function parse_shuttle(d_shuttles, d_reservations) {
                     }
                 }
 
+    // get highlight cell
+
+    let next_track = (() => {
+        for(let dk of dates)
+            for(let tk of times) {
+                let cs = cells[`${dk}/${tk}`];
+                if(!cs)
+                    continue;
+
+                for(let tracks of Object.values(cs))
+                    for(let track of tracks)
+                        if(!track.passed)
+                            return track;
+            }
+        return null;
+    })();
+
     return {
         date_keys: dates,
         time_keys: times,
         cells: cells,
+        next_track: next_track || null,
     };
 }

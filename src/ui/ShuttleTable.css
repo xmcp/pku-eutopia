@@ -39,13 +39,13 @@ table tbody th {
     font-size: 1.2em;
 }
 
-.eu-table tbody tr:not(.eu-table-padding-top):not(.eu-table-padding-bottom):hover th {
+.eu-table:not(.eu-table-touch) tbody tr:not(.eu-table-padding-top):not(.eu-table-padding-bottom):hover th {
     background-color: white;
 }
 
 .eu-table-timecell {
-    width: 55px;
-    min-width: 55px;
+    width: 50px;
+    min-width: 50px;
 }
 .eu-table-pillcell {
     width: 120px;
@@ -100,6 +100,10 @@ table tbody th {
     border-radius: 50%;
     box-shadow: 0 0 1px black, 0 0 2px black;
     margin-left: .8em;
+}
+
+.eu-table-highlighted {
+    background-color: #ffffbb !important;
 }
 
 .eu-color-picked {

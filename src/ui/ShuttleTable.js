@@ -6,7 +6,7 @@ import {ShuttleDetail} from './ShuttleDetail';
 
 import './ShuttleTable.css';
 
-function DateDescriptor({date_str}) {
+function DateDescriptor({date_str, next_track}) {
     let date = new Date(date_str);
 
     let is_today = date.toDateString() === (new Date()).toDateString();
@@ -14,7 +14,7 @@ function DateDescriptor({date_str}) {
     let weekday_desc = '周' + '日一二三四五六日'[date.getDay()];
 
     return (
-        <div className="eu-table-datedesc">
+        <th className={'eu-table-pillcell eu-table-datedesc' + ((next_track && date_str===next_track.date) ? ' eu-table-highlighted' : '')}>
             <b>{
                 is_today ? '今天' :
                 is_yesterday ? '昨天' :
@@ -23,7 +23,7 @@ function DateDescriptor({date_str}) {
             <small>
                 {date.getMonth()+1}-{date.getDate()}
             </small>
-        </div>
+        </th>
     );
 }
 
@@ -86,17 +86,17 @@ function CellDescriptor({celldesc, open_detail}) {
 export function ShuttleTable({data}) {
     let [detail, set_detail] = useState(null);
 
+    let is_touch = navigator.maxTouchPoints > 0;
+
     return (<>
         <div className="eu-width-container eu-drop-shadow" style={{height: '100%'}}>
             <div className="eu-table-scroller">
-                <table className="eu-table">
+                <table className={'eu-table' + (is_touch ? ' eu-table-touch' : '')}>
                     <thead>
                         <tr>
                             <th className="eu-table-timecell" />
                             {data.date_keys.map(date=>
-                                <th key={date} className="eu-table-pillcell">
-                                    <DateDescriptor date_str={date} />
-                                </th>
+                                <DateDescriptor key={date} date_str={date} next_track={data.next_track} />
                             )}
                         </tr>
                     </thead>
@@ -106,7 +106,7 @@ export function ShuttleTable({data}) {
                         </tr>
                         {data.time_keys.map(time=>
                             <tr key={time}>
-                                <th className="eu-table-timecell">
+                                <th className={'eu-table-timecell' + ((data.next_track && time===data.next_track.time) ? ' eu-table-highlighted' : '')}>
                                     {time}
                                 </th>
 
