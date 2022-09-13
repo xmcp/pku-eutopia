@@ -1,4 +1,5 @@
 import {sleep, randint} from '../utils';
+import {handle_redirect} from './common';
 
 export async function reserve(track_id, date_str, time_id) {
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
@@ -23,7 +24,10 @@ export async function reserve(track_id, date_str, time_id) {
                 sub_resource_id: 0,
             }]),
         }),
+        redirect: 'manual',
     });
+
+    handle_redirect(res);
 
     let data = await res.json();
     if(data.e!==0)
@@ -48,7 +52,10 @@ export async function revoke(res_id) {
             appointment_id: res_id,
             type: '1',
         }),
+        redirect: 'manual',
     });
+
+    handle_redirect(res);
 
     let data = await res.json();
     if(data.e!==0)

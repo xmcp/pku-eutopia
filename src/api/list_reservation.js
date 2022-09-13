@@ -1,4 +1,5 @@
 import {sleep, randint} from '../utils';
+import {handle_redirect} from './common';
 
 export async function get_list_reservation() {
     let res = null;
@@ -9,12 +10,16 @@ export async function get_list_reservation() {
         res = await fetch('/mock/mocked_list_reservation.json');
     }
     if(res===null) {
-        res = await fetch(
+        res = await fetch((
             '/site/reservation/my-list'
             +'?p=1'
             +'&page_size=100'
-        );
+        ), {
+            redirect: 'manual',
+        });
     }
+
+    handle_redirect(res);
 
     let data = await res.json();
     if(data.e!==0)

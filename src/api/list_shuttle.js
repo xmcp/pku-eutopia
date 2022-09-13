@@ -1,4 +1,5 @@
 import {sleep, randint, to_yyyymmdd} from '../utils';
+import {handle_redirect} from './common';
 
 function to_monday(d, week_delta) {
     // 'yyyy-mm-dd' for the monday of the given week of the prev date of `d``
@@ -26,12 +27,17 @@ export async function get_list_shuttle(week_delta) {
     }
 
     if(res===null) {
-        res = await fetch(
+        res = await fetch((
             '/site/reservation/list-page'
             +'?hall_id=13'
             +`&time=${monday}`
-        );
+        ), {
+            redirect: 'manual',
+        });
     }
+
+    handle_redirect(res);
+
     let data = await res.json();
     if(data.e!==0)
         throw new Error(`${data.e}: ${data.m}`);
