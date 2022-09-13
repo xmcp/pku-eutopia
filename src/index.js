@@ -26,6 +26,8 @@ class ErrorBoundary extends React.Component {
             return (
                 <div className="eu-error">
                     <p><b>{this.state.error.toString()}</b></p>
+                    <p>Build {process.env.REACT_APP_BUILD_INFO||'---'}, Script {window.USERSCRIPT_COMPAT_VER||'---'}</p>
+                    <p>{window.navigator.userAgent}</p>
                     <pre>{this.state.error.stack.toString()}</pre>
                 </div>
             );

@@ -36,4 +36,11 @@
     left: 0;
     width: 100%;
     background-color: yellow;
+    padding: .5em;
+    box-sizing: border-box;
+}
+
+.eu-error pre {
+    white-space: pre-wrap;
+    font-size: .85em;
 }
