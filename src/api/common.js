@@ -1,12 +1,15 @@
 function alert_session_expired() {
-    if(window.EUTOPIA_SESSION_EXPIRE_ALERTED)
-        return;
+    try {
+        let last_ts = parseInt(localStorage.getItem('EUTOPIA_LAST_SESSION_EXPIRED_TS') || '0', 10);
+        if(last_ts && (Date.now() - last_ts) < 30*1000) // re-logined within 30s, must be some bug, ignore
+            return;
 
-    window.EUTOPIA_SESSION_EXPIRE_ALERTED = true;
-
-    if(window.confirm('会话过期，是否重新登录？')) {
-        window.location.href = '/site/login/cas-login';
+        localStorage.setItem('EUTOPIA_LAST_SESSION_EXPIRED_TS', '' + (+Date.now()));
+    } catch(e) {
+        console.log('cannot detect last session expired time', e);
     }
+
+    window.location.href = '/site/login/cas-login';
 }
 
 export function handle_redirect(res) {
