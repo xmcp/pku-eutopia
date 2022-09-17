@@ -1,4 +1,4 @@
-import {sleep, randint, to_yyyymmdd} from '../utils';
+import {sleep, randint, d_to_yyyymmdd} from '../utils';
 import {handle_redirect} from './common';
 
 function to_monday(d, week_delta) {
@@ -9,7 +9,7 @@ function to_monday(d, week_delta) {
         dow = 7;
 
     let monday = new Date(d - 86400*1000 - (dow-1)*86400*1000 + week_delta*7*86400*1000);
-    return to_yyyymmdd(monday);
+    return d_to_yyyymmdd(monday);
 }
 
 export async function get_list_shuttle(week_delta) {

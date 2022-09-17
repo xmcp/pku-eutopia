@@ -13,7 +13,6 @@
     width: 100%;
     height: 100%;
     background-color: rgba(0, 0, 0, .3);
-    cursor: pointer;
 }
 .eu-drop-shadow {
     box-shadow: 0 0 20px rgba(0, 0, 0, .4);
@@ -56,13 +55,16 @@
     margin: .15em;
     display: flex;
     flex-direction: row;
-    cursor: pointer;
-    border-radius: .5em;
+
+    --radius-left: .5em;
+    --radius-right: .5em;
 }
 .eu-pill>* {
     flex: 1 1 4em;
 }
 .eu-pill-item {
+    cursor: pointer;
+    box-sizing: border-box;
     text-align: center;
     padding: .2em 0;
     border-top: 1px solid black;
@@ -70,12 +72,12 @@
     border-bottom: 1px solid black;
 }
 .eu-pill-item:first-child {
-    border-top-left-radius: .5em;
-    border-bottom-left-radius: .5em;
+    border-top-left-radius: var(--radius-left);
+    border-bottom-left-radius: var(--radius-left);
 }
 .eu-pill-item:last-child {
-    border-top-right-radius: .5em;
-    border-bottom-right-radius: .5em;
+    border-top-right-radius: var(--radius-right);
+    border-bottom-right-radius: var(--radius-right);
     border-right: 1px solid black;
 }
 

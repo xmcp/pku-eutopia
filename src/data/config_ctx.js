@@ -8,7 +8,7 @@ export const ConfigCtx = createContext({
 function make_default(c) {
     return {
         location: 'cp',
-        showtext: 'left',
+        showtext: 'picked',
         ...c,
     };
 }

@@ -1,19 +1,24 @@
 import {useContext} from 'react';
 
-import {to_yyyymmdd} from '../utils';
+import {d_to_yyyymmdd, hhmm_to_int} from '../utils';
 import {ConfigCtx} from './config_ctx';
 import {reservation_status, normalize_track_name} from './common';
 
-export let DIR_KEYS_LIST = ['toyy', 'tocp'];
+let DIR_INDEX = {'toyy': 0, 'tocp': 1};
 let DIR_KEYS_FROM_API = {'昌平->燕园': 'toyy', '燕园->昌平': 'tocp'};
 
-let STATUS_DESC = {
+export let STATUS_DESC = {
     0: '已过期',
     1: '可预约',
     2: '收费',
     3: '已约满',
     4: '失效？',
     5: '未开放',
+}
+export let STATUS_MAGIC_NUMBER = {
+    PASSED: 0,
+    AVAILABLE: 1,
+    FUTURE: 5,
 }
 
 function to_int(s) {
@@ -24,23 +29,19 @@ function date_key(s) { // yyyy-mm-dd
     return +(new Date(s));
 }
 
-function time_key(s) { // hh:mm
-    return +(new Date('1970-01-01T'+s));
-}
-
 function filter_dates(ds) {
     //return Array.from(ds); /////
 
-    let today_ts = window.EUTOPIA_USE_MOCK ? +(new Date('2022-09-08')) :  +(new Date());
+    let today_ts = window.EUTOPIA_USE_MOCK ? +(new Date('2022-09-17')) :  +(new Date());
 
     let whitelist = new Set();
     for(let delta = -1; delta<=7; delta++)
-        whitelist.add(to_yyyymmdd(new Date(today_ts + delta*86400*1000)));
+        whitelist.add(d_to_yyyymmdd(new Date(today_ts + delta*86400*1000)));
 
     return Array.from(ds).filter((s)=>whitelist.has(s));
 }
 
-export function DescribeDirectionShort({dir}) {
+function DescribeDirectionShort({dir}) {
     let {config} = useContext(ConfigCtx);
 
     return (
@@ -50,7 +51,7 @@ export function DescribeDirectionShort({dir}) {
     )[dir] || `((${dir}))`;
 }
 
-export function DescribeDirectionLong({dir}) {
+function DescribeDirectionLong({dir}) {
     let {config} = useContext(ConfigCtx);
 
     return (
@@ -60,22 +61,86 @@ export function DescribeDirectionLong({dir}) {
     )[dir] || `((${dir}))`;
 }
 
+const PX_PER_MINUTE = .75;
+
 export function parse_shuttle(d_shuttles, d_reservations) {
+    let res= {
+        series: [],
+        yaxis: {
+            max_offset: null,
+            ticks: [],
+        },
+    };
+
     // collect shuttle times
 
     let dates_set = new Set();
-    let times_set = new Set();
+    let time_min = null;
+    let time_max = null;
 
     for(let track of d_shuttles)
         for(let cal of Object.values(track.table))
             for(let point of cal)
                 if(to_int(point.row.total)>0) {
                     dates_set.add(point.date);
-                    times_set.add(point.yaxis);
+                    let time = hhmm_to_int(point.yaxis);
+                    if(time_min===null || time_min>time)
+                        time_min = time;
+                    if(time_max===null || time_max<time)
+                        time_max = time;
                 }
 
+    // add a slight margin
+    time_min = Math.max(0, time_min-60);
+    time_max = Math.min(24*60, time_max+30);
+
+    time_min = Math.floor(time_min/60)*60; // floor to hour
+    time_max = Math.ceil(time_max/60)*60; // ceil to hour
+
     let dates = filter_dates(dates_set).sort((a, b) => date_key(a)-date_key(b));
-    let times = Array.from(times_set).sort((a, b) => time_key(a)-time_key(b));
+
+    let date_str_to_series = {};
+
+    dates.forEach(d => {
+        let date = new Date(d);
+
+        let is_today = date.toDateString() === (new Date()).toDateString();
+        let is_yesterday = date.toDateString() === (new Date((+new Date()) - 86400*1000)).toDateString();
+        let weekday_desc = '周' + '日一二三四五六日'[date.getDay()];
+
+        let series = {
+            date: d,
+            title: <>
+                {
+                    is_today ? '今天' :
+                    is_yesterday ? '昨天' :
+                        weekday_desc
+                }{' '}
+                <small>
+                    {date.getMonth()+1}-{date.getDate()}
+                </small>
+            </>,
+            highlight: is_today,
+            cols: Object.keys(DIR_INDEX).length,
+            rows: [],
+        };
+
+        res.series.push(series);
+        date_str_to_series[d] = series;
+    });
+
+    res.yaxis.max_offset = PX_PER_MINUTE * (time_max - time_min);
+
+    let cur_hour = new Date().getHours();
+
+    for(let i=time_min; i<=time_max; i+=60) {
+        let h = Math.round(i/60);
+        res.yaxis.ticks.push({
+            name: (''+h).padStart(2, '0'),
+            offset: PX_PER_MINUTE * (i - time_min),
+            highlight: h===cur_hour,
+        });
+    }
 
     // collect reservations
 
@@ -93,7 +158,52 @@ export function parse_shuttle(d_shuttles, d_reservations) {
 
     // collect cells
 
-    let cells = {};
+    function get_cell(date_str, time_str, dir) {
+        let series = date_str_to_series[date_str];
+        if(!series)
+            return null;
+
+        let row = null;
+
+        for(let r of series.rows)
+            if(r.time===time_str) {
+                row = r;
+                break;
+            }
+
+        if(!row) { // time does not exist, create new row
+            row = {
+                y_offset: PX_PER_MINUTE * (hhmm_to_int(time_str) - time_min),
+                time: time_str,
+                cells: [],
+            };
+            series.rows.push(row);
+        }
+
+        for(let c of row.cells)
+            if(c.index===DIR_INDEX[dir])
+                return c;
+
+        // dir does not exist, create new cell
+
+        let cell = {
+            index: DIR_INDEX[dir],
+            title_long: <>
+                {series.date}{' '}{time_str}{' '}
+                <DescribeDirectionLong dir={dir} />
+            </>,
+            title_short: <DescribeDirectionShort dir={dir} />,
+
+            // will be initialized later
+            status: null,
+            tot_capacity: null,
+            tot_left: null,
+
+            tracks: [],
+        };
+        row.cells.push(cell);
+        return cell;
+    }
 
     for(let track of d_shuttles)
         for(let cal of Object.values(track.table))
@@ -101,63 +211,71 @@ export function parse_shuttle(d_shuttles, d_reservations) {
                 if(to_int(point.row.total)>0) {
                     let status = point.row.status;
                     let reservation = (reserved[point.date+' '+point.yaxis] || {})[track.id] || null;
-                    let cell = {
+
+                    let trackcell = {
                         track_id: track.id,
                         track_name: normalize_track_name(track.name),
 
-                        capacity: point.row.total,
-                        left: point.row.margin,
+                        capacity: to_int(point.row.total),
+                        left: to_int(point.row.margin),
 
                         picked: reservation,
-                        passed: status===0,
-                        available: status===1,
-                        why_unavailable: STATUS_DESC[status] || `((${status}))`,
+                        status_id: status,
 
                         date: point.date,
-                        time: point.yaxis,
                         time_id: point.time_id,
                     };
 
-                    let key = `${point.date}/${point.yaxis}`;
-                    if(!cells[key])
-                        cells[key] = {};
-                    let container = cells[key];
-
-                    let dirs = track.arr_hardware_name;
-                    for(let dir of dirs) {
+                    for(let dir of track.arr_hardware_name) {
                         let dkey = DIR_KEYS_FROM_API[dir];
                         if(dkey) {
-                            if(!container[dkey])
-                                container[dkey] = [];
-                            container[dkey].push({
-                                ...cell,
-                                direction: dkey,
-                            });
+                            let c = get_cell(point.date, point.yaxis, dkey);
+                            // it is possible that c===null if track date is out of display range
+
+                            if(c) {
+                                c.tracks.push(trackcell);
+                            }
                         }
                     }
                 }
 
-    // get highlight cell
+    // finalize cell group
 
-    let next_track = (() => {
-        for(let dk of dates)
-            for(let tk of times) {
-                let cs = cells[`${dk}/${tk}`];
-                if(!cs)
-                    continue;
+    for(let series of res.series) {
+        series.rows.sort((a, b) => a.y_offset - b.y_offset);
 
-                for(let tracks of Object.values(cs))
-                    for(let track of tracks)
-                        if(!track.passed)
-                            return track;
+        for(let row of series.rows) {
+            row.cells.sort((a, b) => a.index - b.index);
+
+            for(let cell of row.cells) {
+                cell.tot_capacity = 0;
+                cell.tot_left = 0;
+
+                let picked = false;
+                let passed = false;
+                let available = false;
+
+                for(let track of cell.tracks) {
+                    cell.tot_capacity += track.capacity;
+                    cell.tot_left += track.left;
+
+                    if(track.picked)
+                        picked = true;
+                    else if(track.status_id===STATUS_MAGIC_NUMBER.PASSED)
+                        passed = true;
+                    else if(track.status_id===STATUS_MAGIC_NUMBER.AVAILABLE)
+                        available = true;
+                }
+
+                cell.status = (
+                    picked ? 'picked' :
+                    available ? 'available' :
+                    (!passed && cell.tot_left===0) ? 'full' :
+                        'disabled'
+                );
             }
-        return null;
-    })();
+        }
+    }
 
-    return {
-        date_keys: dates,
-        time_keys: times,
-        cells: cells,
-        next_track: next_track || null,
-    };
+    return res;
 }

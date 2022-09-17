@@ -1,139 +1,151 @@
 import {useState, useContext} from 'react';
 
-import {DIR_KEYS_LIST, DescribeDirectionShort} from '../data/shuttle_parser';
 import {ConfigCtx} from '../data/config_ctx';
 import {ShuttleDetail} from './ShuttleDetail';
+import {range0} from '../utils';
 
 import './ShuttleTable.css';
 
-function DateDescriptor({date_str, next_track}) {
-    let date = new Date(date_str);
+const PILL_WIDTH = 60;
+const PILL_HEIGHT = 40;
 
-    let is_today = date.toDateString() === (new Date()).toDateString();
-    let is_yesterday = date.toDateString() === (new Date((+new Date()) - 86400*1000)).toDateString();
-    let weekday_desc = '周' + '日一二三四五六日'[date.getDay()];
+function CellGroup({cells, open_detail, has_radius_left, has_radius_right}) {
+    let {config} = useContext(ConfigCtx);
 
     return (
-        <th className={'eu-table-pillcell eu-table-datedesc' + ((next_track && date_str===next_track.date) ? ' eu-table-highlighted' : '')}>
-            <b>{
-                is_today ? '今天' :
-                is_yesterday ? '昨天' :
-                    weekday_desc
-            }</b>{' '}
-            <small>
-                {date.getMonth()+1}-{date.getDate()}
-            </small>
-        </th>
+        <div
+            className="eu-pill"
+            style={{
+                height: PILL_HEIGHT + 'px',
+                "--radius-left": has_radius_left ? '20px' : '0',
+                "--radius-right": has_radius_right ? '20px' : '0',
+            }}
+        >
+            {cells.map(c =>
+                <div
+                    key={c.index}
+                    onClick={()=>open_detail(c)}
+                    className={'eu-pill-item eu-color-'+c.status}
+                    style={{width: PILL_WIDTH + 'px'}}
+                >
+                    <div className="eu-pill-itemtitle">{c.title_short}</div>
+                    <div className="eu-pill-itemdesc">
+                        {config.showtext==='picked' ? c.tot_capacity - c.tot_left : c.tot_left}
+                    </div>
+                </div>
+            )}
+        </div>
     );
 }
 
-function CellDescriptor({celldesc, open_detail}) {
-    let {config} = useContext(ConfigCtx);
-
-    if(celldesc===null)
+function CellGroupedRow({cells, cols, y_offset, open_detail}) {
+    if(cells.length===0)
         return null;
 
-    let dirs = [];
+    let groups = [];
+    for(let i=0; i<cells.length; i++) {
+        if(i===0 || cells[i].index !== cells[i-1].index+1)
+            groups.push([]);
 
-    for(let dir of DIR_KEYS_LIST) {
-        if(!Object.prototype.hasOwnProperty.call(celldesc, dir)) {
-            dirs.push(<div key={dir} className="eu-pill-item eu-color-empty" />);
-            continue;
-        }
-
-        let tracks = celldesc[dir];
-
-        let picked = false;
-        let available = false;
-        let tot_left = 0;
-        let tot_picked = 0;
-        let passed = false;
-
-        for(let track of tracks) {
-            if(track.picked)
-                picked = true;
-
-            if(track.available)
-                available = true;
-
-            if(track.passed)
-                passed = true;
-
-            tot_left += track.left;
-            tot_picked += track.capacity - track.left;
-        }
-
-        dirs.push(
-            <div
-                key={dir} onClick={()=>open_detail(tracks)}
-                className={'eu-pill-item eu-color-'+(picked ? 'picked' : available ? 'available' : (!passed && tot_left===0) ? 'full' : 'disabled')}
-            >
-                <div className="eu-pill-itemtitle"><DescribeDirectionShort dir={dir} /></div>
-                <div className="eu-pill-itemdesc">
-                    {config.showtext==='picked' ? tot_picked : tot_left}
-                </div>
-            </div>
-        );
+        groups[groups.length-1].push(cells[i]);
     }
 
-    return (
-        <div className="eu-pill">
-            {dirs}
+    return groups.map((g, idx) =>
+        <div
+            key={idx}
+            className="eu-table-canvas-item"
+            style={{
+                left: g[0].index * PILL_WIDTH,
+                top: y_offset,
+            }}
+        >
+            <CellGroup
+                cells={g} open_detail={open_detail}
+                has_radius_left={g[0].index===0} has_radius_right={g[g.length-1].index===cols-1}
+            />
         </div>
-    )
+    );
 }
 
 export function ShuttleTable({data}) {
     let [detail, set_detail] = useState(null);
 
-    let is_touch = navigator.maxTouchPoints > 0;
+    let canvas_height = data.yaxis.max_offset + PILL_HEIGHT;
 
     return (<>
         <div className="eu-width-container eu-drop-shadow" style={{height: '100%'}}>
             <div className="eu-table-scroller">
-                <table className={'eu-table' + (is_touch ? ' eu-table-touch' : '')}>
-                    <thead>
-                        <tr>
-                            <th className="eu-table-timecell" />
-                            {data.date_keys.map(date=>
-                                <DateDescriptor key={date} date_str={date} next_track={data.next_track} />
-                            )}
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr className="eu-table-padding-top">
-                            <th className="eu-table-timecell" />
-                        </tr>
-                        {data.time_keys.map(time=>
-                            <tr key={time}>
-                                <th className={'eu-table-timecell' + ((data.next_track && time===data.next_track.time) ? ' eu-table-highlighted' : '')}>
-                                    {time}
-                                </th>
-
-                                {data.date_keys.map(date=>
-                                    <td key={date} className="eu-table-pillcell">
-                                        <CellDescriptor celldesc={data.cells[`${date}/${time}`] || null} open_detail={set_detail} />
-                                    </td>
-                                )}
-                            </tr>
+                <div className="eu-table-header">
+                    <div className="eu-table-timecell" />
+                    {data.series.map(s =>
+                        <div
+                            key={s.date}
+                            className={'eu-table-series' + (s.highlight ? ' eu-table-highlighted' : '')}
+                            style={{width: (PILL_WIDTH * s.cols) + 'px'}}
+                        >
+                            <div className="eu-table-series-addon-left">[</div>
+                            <div className="eu-table-series-addon-right">]</div>
+                            {s.title}
+                        </div>
+                    )}
+                </div>
+                <div className="eu-table-body">
+                    <div
+                        className="eu-table-canvas eu-table-timecell"
+                        style={{height: canvas_height + 'px'}}
+                    >
+                        {data.yaxis.ticks.map(t =>
+                            <div
+                                key={t.offset}
+                                className={'eu-table-timecell eu-table-timecell-label eu-table-canvas-item' + (t.highlight ? ' eu-table-highlighted' : '')}
+                                style={{
+                                    height: PILL_HEIGHT + "px",
+                                    lineHeight: PILL_HEIGHT + "px",
+                                    top: t.offset + "px"
+                                }}
+                            >
+                                {t.name}
+                            </div>
                         )}
-                        <tr className="eu-table-padding-bottom">
-                            <th className="eu-table-timecell" />
-                            <td colSpan={2} className="eu-legend-row">
-                                <span className="eu-legend-box eu-color-available" /> 可预约
-                                <span className="eu-legend-box eu-color-picked" /> 已预约
-                                <span className="eu-legend-box eu-color-full" /> 已约满
-                                <span className="eu-legend-box eu-color-disabled" /> 已过期
-                            </td>
-                            <td></td> {/* <- last-child gets `padding-right: 1em` */}
-                        </tr>
-                    </tbody>
-                </table>
+                    </div>
+                    {data.series.map(s =>
+                        <div key={s.date} className="eu-table-series" style={{width: (PILL_WIDTH * s.cols) + 'px'}}>
+                            <div className="eu-table-canvas" style={{height: canvas_height + 'px'}}>
+                                {range0(s.cols).map(i =>
+                                    <div
+                                        key={i}
+                                        className="eu-table-canvas-item eu-table-timeline"
+                                        style={{
+                                            left: ((i+0.5) * PILL_WIDTH) + 'px',
+                                            top: 0,
+                                            height: canvas_height + 'px',
+                                        }}
+                                    />
+                                )}
+                                {s.rows.map(r =>
+                                    <CellGroupedRow
+                                        key={r.y_offset}
+                                        cols={s.cols}
+                                        cells={r.cells} y_offset={r.y_offset}
+                                        open_detail={set_detail}
+                                    />
+                                )}
+                            </div>
+                        </div>
+                    )}
+                </div>
+                <div className="eu-table-legend">
+                    <div className="eu-table-timecell" />
+                    <span className="eu-legend-box eu-color-available" /> 可预约
+                    <span className="eu-legend-box eu-color-picked" /> 已预约
+                    <span className="eu-legend-box eu-color-full" /> 已约满
+                    <span className="eu-legend-box eu-color-disabled" /> 已过期
+                </div>
             </div>
         </div>
 
         {detail!==null &&
-            <ShuttleDetail cells={detail} close={()=>set_detail(null)} />
+            <ShuttleDetail cell={detail} close={()=>set_detail(null)} />
         }
-    </>)
+    </>);
 }
