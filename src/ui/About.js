@@ -36,7 +36,7 @@ function Preference() {
         <p>
             <b>
                 我常住在{' '}
-                <select value={config.location} onInput={(e)=>update_config({
+                <select value={config.location} onChange={(e)=>update_config({
                     ...config,
                     location: e.target.value,
                 })}>
@@ -54,7 +54,7 @@ function Preference() {
         </p>
         <p><b>
             在界面上显示班车的{' '}
-            <select value={config.showtext} onInput={(e)=>update_config({
+            <select value={config.showtext} onChange={(e)=>update_config({
                 ...config,
                 showtext: e.target.value,
             })}>
@@ -63,6 +63,15 @@ function Preference() {
             </select>
             {' '}数量
         </b></p>
+        <p>
+            <label>
+                <input type="checkbox" checked={config.show_yesterday==='on'} onChange={(e)=>update_config({
+                    ...config,
+                    show_yesterday: e.target.checked ? 'on' : 'off',
+                })} />
+                <b>在班车时刻中显示昨天</b>
+            </label>
+        </p>
     </>);
 }
 

@@ -5,7 +5,7 @@ import {parse_shuttle} from '../data/shuttle_parser';
 import {ShuttleTable} from './ShuttleTable';
 import {ReservationView} from './ReservationView';
 import {parse_reservation, got_res_id} from '../data/reservation_parser';
-import {ConfigProvider} from '../data/config_ctx';
+import {ConfigProvider, ConfigCtx} from '../data/config_ctx';
 import {About} from './About';
 
 import './App.css';
@@ -21,6 +21,7 @@ function Skeleton() {
 
 function Router() {
     let data = useContext(DataCtx);
+    let {config} = useContext(ConfigCtx);
 
     let [route, set_route] = useState('off');
 
@@ -29,9 +30,10 @@ function Router() {
             parse_shuttle(
                 data.shuttle_thisweek.concat(with_fallback(data.shuttle_nextweek)),
                 with_fallback(data.reservation),
+                config.show_yesterday==='on',
             ) :
             null
-    , [data.shuttle_thisweek, data.shuttle_nextweek, data.reservation]);
+    , [data.shuttle_thisweek, data.shuttle_nextweek, data.reservation, config.show_yesterday]);
 
     let reservation_data = useMemo(()=>
         loaded(data.reservation) && (got_res_id() || loaded(data.shuttle_thisweek)) ?

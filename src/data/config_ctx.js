@@ -9,6 +9,7 @@ function make_default(c) {
     return {
         location: 'cp',
         showtext: 'picked',
+        show_yesterday: 'on',
         ...c,
     };
 }

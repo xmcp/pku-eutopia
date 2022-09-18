@@ -29,13 +29,13 @@ function date_key(s) { // yyyy-mm-dd
     return +(new Date(s));
 }
 
-function filter_dates(ds) {
+function filter_dates(ds, show_yesterday) {
     //return Array.from(ds); /////
 
     let today_ts = window.EUTOPIA_USE_MOCK ? +(new Date('2022-09-17')) :  +(new Date());
 
     let whitelist = new Set();
-    for(let delta = -1; delta<=7; delta++)
+    for(let delta = show_yesterday ? -1 : 0; delta<=7; delta++)
         whitelist.add(d_to_yyyymmdd(new Date(today_ts + delta*86400*1000)));
 
     return Array.from(ds).filter((s)=>whitelist.has(s));
@@ -63,7 +63,7 @@ function DescribeDirectionLong({dir}) {
 
 const PX_PER_MINUTE = .75;
 
-export function parse_shuttle(d_shuttles, d_reservations) {
+export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
     let res= {
         series: [],
         yaxis: {
@@ -97,7 +97,7 @@ export function parse_shuttle(d_shuttles, d_reservations) {
     time_min = Math.floor(time_min/60)*60; // floor to hour
     time_max = Math.ceil(time_max/60)*60; // ceil to hour
 
-    let dates = filter_dates(dates_set).sort((a, b) => date_key(a)-date_key(b));
+    let dates = filter_dates(dates_set, show_yesterday).sort((a, b) => date_key(a)-date_key(b));
 
     let date_str_to_series = {};
 
