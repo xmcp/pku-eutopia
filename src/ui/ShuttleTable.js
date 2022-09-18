@@ -9,7 +9,7 @@ import './ShuttleTable.css';
 const PILL_WIDTH = 60;
 const PILL_HEIGHT = 40;
 
-function CellGroup({cells, open_detail, has_radius_left, has_radius_right}) {
+function CellGroup({cells, open_detail, cur_detail, has_radius_left, has_radius_right}) {
     let {config} = useContext(ConfigCtx);
 
     return (
@@ -25,7 +25,7 @@ function CellGroup({cells, open_detail, has_radius_left, has_radius_right}) {
                 <div
                     key={c.index}
                     onClick={()=>open_detail(c)}
-                    className={'eu-pill-item eu-color-'+c.status}
+                    className={'eu-pill-item eu-color-'+((cur_detail!==null && cur_detail===c) ? 'detail' : c.status)}
                     style={{width: PILL_WIDTH + 'px'}}
                 >
                     <div className="eu-pill-itemtitle">{c.title_short}</div>
@@ -38,7 +38,7 @@ function CellGroup({cells, open_detail, has_radius_left, has_radius_right}) {
     );
 }
 
-function CellGroupedRow({cells, cols, y_offset, open_detail}) {
+function CellGroupedRow({cells, cols, y_offset, open_detail, cur_detail}) {
     if(cells.length===0)
         return null;
 
@@ -61,7 +61,7 @@ function CellGroupedRow({cells, cols, y_offset, open_detail}) {
             }}
         >
             <CellGroup
-                cells={g} open_detail={open_detail}
+                cells={g} open_detail={open_detail} cur_detail={cur_detail}
                 has_radius_left={g[0].index===0} has_radius_right={g[g.length-1].index===cols-1}
             />
         </div>
@@ -128,7 +128,7 @@ export function ShuttleTable({data}) {
                                         key={r.y_offset}
                                         cols={s.cols}
                                         cells={r.cells} y_offset={r.y_offset}
-                                        open_detail={set_detail}
+                                        open_detail={set_detail} cur_detail={detail}
                                     />
                                 )}
                             </div>

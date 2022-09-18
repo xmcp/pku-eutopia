@@ -140,6 +140,10 @@
 .eu-color-empty {
     background-color: #e4e4e4;
 }
+.eu-color-detail {
+    background-color: black;
+    color: white;
+}
 
 .eu-table-body .eu-pill .eu-color-empty {
     cursor: not-allowed;
