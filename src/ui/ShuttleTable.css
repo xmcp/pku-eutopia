@@ -27,7 +27,7 @@
     font-size: 1.2em;
     line-height: 2em;
     font-weight: bold;
-    z-index: 12;
+    z-index: 40002;
     background-color: #f4f4f4;
 }
 
@@ -74,11 +74,12 @@
 .eu-table-body>:first-child {
     position: sticky;
     left: 0;
-    z-index: 11;
+    z-index: 40001;
 }
 
 .eu-table-body .eu-pill {
     margin: 0;
+    box-shadow: 0 0 3px rgba(0, 0, 0, .3);
 }
 
 .eu-table-canvas {

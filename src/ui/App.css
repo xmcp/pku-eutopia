@@ -58,6 +58,8 @@
 
     --radius-left: .5em;
     --radius-right: .5em;
+
+    border-radius: var(--radius-left) var(--radius-right) var(--radius-right) var(--radius-left); /* so box-shadow works fine */
 }
 .eu-pill>* {
     flex: 1 1 4em;

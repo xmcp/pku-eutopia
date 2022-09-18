@@ -57,6 +57,7 @@ function CellGroupedRow({cells, cols, y_offset, open_detail}) {
             style={{
                 left: g[0].index * PILL_WIDTH,
                 top: y_offset,
+                zIndex: 39999 - y_offset, // top pills are shown on the top
             }}
         >
             <CellGroup
