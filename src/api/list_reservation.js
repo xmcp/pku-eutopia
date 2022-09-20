@@ -13,7 +13,7 @@ export async function get_list_reservation() {
         res = await fetch((
             '/site/reservation/my-list'
             +'?p=1'
-            +'&page_size=100'
+            +'&page_size=50'
         ), {
             redirect: 'manual',
         });
