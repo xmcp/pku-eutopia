@@ -21,19 +21,16 @@ export function reservation_status(r) {
     else if(r.status_name==='已签到')
         return 'finished';
     else if(r.status_name==='已预约') {
-        if(r.is_cancel)
-            return 'pending_revokable';
-
-        let d = parse_period_text(r.period_text);
-        if(d===null)
-            return 'pending_unkown';
-
-        let sign_time = +d;
         let cur_time = +new Date();
-        if(cur_time>sign_time+41*60*1000)
-            return 'finished_absent';
-        else if(cur_time>sign_time-16*60*1000)
+        let d = parse_period_text(r.period_text);
+        let sign_time = d ? (+d) : 0;
+
+        if(sign_time && cur_time<sign_time+61*60*1000 && cur_time>sign_time-16*60*1000)
             return 'pending_signable';
+        else if(r.is_cancel)
+            return 'pending_revokable';
+        else if(sign_time && cur_time>=sign_time+61*60*1000)
+            return 'finished_absent';
         else
             return 'pending';
     } else
