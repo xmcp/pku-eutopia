@@ -73,6 +73,24 @@ export function DataProvider({children}) {
         reload_all();
     }, [reload_all]);
 
+    // auto reload
+    useEffect(()=>{
+        function on_focus() {
+            let now = +new Date();
+            let last = Math.max(
+                ...Object.values(last_update).filter(x => x!==null).map(x => +x)
+            );
+            if(now-last > 1000*60*5) {
+                reload_all(true);
+            }
+        }
+
+        window.addEventListener('focus', on_focus);
+        return ()=>{
+            window.removeEventListener('focus', on_focus);
+        }
+    },[reload_all, last_update]);
+
     return (
         <DataCtx.Provider value={{
             shuttle_thisweek,
