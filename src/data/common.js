@@ -15,6 +15,9 @@ function parse_period_text(t) {
     return d;
 }
 
+const SIGNIN_TIME_ALLOWANCE_BEFORE = 61*60*1000;
+const SIGNIN_TIME_ALLOWANCE_AFTER = 41*60*1000;
+
 export function reservation_status(r) {
     if(r.status_name==='已撤销')
         return 'revoked';
@@ -25,11 +28,11 @@ export function reservation_status(r) {
         let d = parse_period_text(r.period_text);
         let sign_time = d ? (+d) : 0;
 
-        if(sign_time && cur_time<sign_time+61*60*1000 && cur_time>sign_time-16*60*1000)
+        if(sign_time && cur_time<sign_time+SIGNIN_TIME_ALLOWANCE_AFTER && cur_time>sign_time-SIGNIN_TIME_ALLOWANCE_BEFORE)
             return 'pending_signable';
         else if(r.is_cancel)
             return 'pending_revokable';
-        else if(sign_time && cur_time>=sign_time+61*60*1000)
+        else if(sign_time && cur_time>=sign_time+SIGNIN_TIME_ALLOWANCE_AFTER)
             return 'finished_absent';
         else
             return 'pending';
