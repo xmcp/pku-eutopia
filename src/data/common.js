@@ -45,6 +45,8 @@ export function normalize_track_name(s) {
         [/(昌平新校区（马池口校园）)/g, '马池口'],
         [/昌平新校区（200号校园）/g, '200号'],
         [/燕园校区/g, '燕园'],
+        [/200号校区/g, '200号'],
+        [/新校区/g, '马池口'],
     ];
 
     for(let [from, to] of rules) {
