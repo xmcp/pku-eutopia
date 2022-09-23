@@ -2,7 +2,7 @@
 
 **兆京大学班车预约 for Humans™**
 
-班车预约系统重制版：快速约车，一键签到，功能整合，界面易用
+班车预约系统重制版：快速约车，一键签到，一目了然，触手可及
 
 ![screenshot](userscript/media/screenshot.png)
 
