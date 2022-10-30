@@ -1,13 +1,9 @@
-import {sleep, randint} from '../utils';
-import {handle_redirect} from './common';
+import {handle_redirect, mock} from './common';
 
 export async function get_list_reservation() {
     let res = null;
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
-        console.log('mocking list_reservation');
-        await sleep(1000+randint(1000));
-
-        res = await fetch('/mock/mocked_list_reservation.json');
+        res = await mock('/mock/mocked_list_reservation.json');
     }
     if(res===null) {
         res = await fetch((

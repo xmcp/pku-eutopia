@@ -1,10 +1,9 @@
-import {sleep, randint} from '../utils';
-import {handle_redirect} from './common';
+import {sleep} from '../utils';
+import {handle_redirect, mock} from './common';
 
 export async function reserve(track_id, date_str, time_id) {
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
-        console.log('mocking reserve', track_id, date_str, time_id);
-        await sleep(500+randint(500));
+        await mock(null);
         return;
     }
 
@@ -38,8 +37,7 @@ export async function reserve(track_id, date_str, time_id) {
 
 export async function revoke(res_id) {
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
-        console.log('mocking revoke', res_id);
-        await sleep(500+randint(500));
+        await mock(null);
         return;
     }
 

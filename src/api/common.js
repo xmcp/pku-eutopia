@@ -1,3 +1,5 @@
+import {sleep, randint} from '../utils';
+
 function alert_session_expired() {
     // try {
     //     let last_ts = parseInt(localStorage.getItem('EUTOPIA_LAST_SESSION_EXPIRED_TS') || '0', 10);
@@ -17,4 +19,16 @@ export function handle_redirect(res) {
         alert_session_expired();
         throw new Error('网络错误（跳转）');
     }
+}
+
+export async function mock(url) {
+    console.log('mocking', url);
+
+    await sleep(750+randint(750));
+
+    if(randint(3)===0)
+        throw new Error('mocked network error');
+
+    if(url!==null)
+        return await fetch(url);
 }

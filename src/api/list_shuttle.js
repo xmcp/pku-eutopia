@@ -1,5 +1,5 @@
-import {sleep, randint, d_to_yyyymmdd} from '../utils';
-import {handle_redirect} from './common';
+import {d_to_yyyymmdd} from '../utils';
+import {handle_redirect, mock} from './common';
 
 function to_monday(d, week_delta) {
     // 'yyyy-mm-dd' for the monday of the given week of the prev date of `d``
@@ -17,13 +17,10 @@ export async function get_list_shuttle(week_delta) {
 
     let res = null;
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
-        console.log('mocking list_shuttle', week_delta);
-        await sleep(1000+randint(1000));
-
         if(week_delta===0)
-            res = await fetch('/mock/mocked_list_shuttle_thisweek.json');
+            res = await mock('/mock/mocked_list_shuttle_thisweek.json');
         else if(week_delta===1)
-            res = await fetch('/mock/mocked_list_shuttle_nextweek.json');
+            res = await mock('/mock/mocked_list_shuttle_nextweek.json');
     }
 
     if(res===null) {

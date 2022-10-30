@@ -1,4 +1,4 @@
-import {str_count} from '../utils';
+import {str_count, sleep} from '../utils';
 
 function parse_period_text(t) {
     if((typeof t)!=='string')
@@ -53,4 +53,17 @@ export function normalize_track_name(s) {
         s = s.replace(from, to);
     }
     return s;
+}
+
+export async function with_retry(fn) {
+    for(let delay of [250, 500, 1250]) {
+        try {
+            return await fn();
+        } catch(e) {
+            console.error('error, will retry after '+delay+' ms');
+            console.error(e);
+            await sleep(delay);
+        }
+    }
+    return await fn();
 }

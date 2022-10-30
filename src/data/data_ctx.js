@@ -2,6 +2,7 @@ import {createContext, useState, useEffect, useCallback} from 'react';
 
 import {get_list_shuttle} from '../api/list_shuttle';
 import {get_list_reservation} from '../api/list_reservation';
+import {with_retry} from './common';
 
 export const SYMBOL_FAILED = Symbol('failed');
 
@@ -60,9 +61,9 @@ export function DataProvider({children}) {
         set_last_update({});
 
         Promise.allSettled([
-            reload(get_list_shuttle(0), set_shuttle_thisweek, 'shuttle_thisweek', soft),
-            reload(get_list_shuttle(1), set_shuttle_nextweek, 'shuttle_nextweek', soft),
-            reload(get_list_reservation(), set_reservation, 'reservation', soft),
+            reload(with_retry(()=>get_list_shuttle(0)), set_shuttle_thisweek, 'shuttle_thisweek', soft),
+            reload(with_retry(()=>get_list_shuttle(1)), set_shuttle_nextweek, 'shuttle_nextweek', soft),
+            reload(with_retry(()=>get_list_reservation()), set_reservation, 'reservation', soft),
         ])
             .then(()=>{
                 set_loading(false);
