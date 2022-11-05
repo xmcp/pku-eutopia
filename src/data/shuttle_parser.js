@@ -5,7 +5,7 @@ import {ConfigCtx} from './config_ctx';
 import {reservation_status, normalize_track_name} from './common';
 
 let DIR_INDEX = {'toyy': 0, 'tocp': 1};
-let DIR_KEYS_FROM_API = {'33': 'toyy', '34': 'tocp'};
+let DIR_KEYS_FROM_API = {'昌平新校区': 'toyy', '燕园校区': 'tocp'};
 
 export let STATUS_DESC = {
     0: '已过期',
@@ -226,15 +226,13 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
                         time_id: point.time_id,
                     };
 
-                    for(let dir_id of track.arr_hardware_id) {
-                        let dkey = DIR_KEYS_FROM_API[dir_id];
-                        if(dkey) {
-                            let c = get_cell(point.date, point.yaxis, dkey);
-                            // it is possible that c===null if track date is out of display range
+                    let dkey = DIR_KEYS_FROM_API[track.json_address.campus_name];
+                    if(dkey) {
+                        let c = get_cell(point.date, point.yaxis, dkey);
+                        // it is possible that c===null if track date is out of display range
 
-                            if(c) {
-                                c.tracks.push(trackcell);
-                            }
+                        if(c) {
+                            c.tracks.push(trackcell);
                         }
                     }
                 }

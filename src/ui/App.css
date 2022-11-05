@@ -90,3 +90,17 @@
     background-color: black;
     color: white;
 }
+
+.eu-alert-banner {
+    position: fixed;
+    bottom: 3em;
+    left: 0;
+    width: 100%;
+    height: 2em;
+    line-height: 2em;
+    background-color: yellow;
+    text-align: center;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 10000;
+}

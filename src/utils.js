@@ -25,3 +25,7 @@ export function range0(r) {
         ret.push(i);
     return ret;
 }
+
+export function eu_sys_version() {
+    return document.domain==='wproc.pku.edu.cn' ? 2 : 1;
+}

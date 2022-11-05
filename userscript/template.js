@@ -1,24 +1,29 @@
 // ==UserScript==
 // @name         Eutopia
 // @namespace    http://xmcp.ltd/
-// @version      0.3
+// @version      0.4
 // @description  Top of the top. Top of the world.
 // @author       xmcp
 // @match        https://process.pku.edu.cn/v2/site/index*
 // @match        https://process.pku.edu.cn/v2/site/m_index*
 // @match        https://process-443.w.pku.edu.cn/v2/site/index*
 // @match        https://process-443.w.pku.edu.cn/v2/site/m_index*
+// @match        https://wproc.pku.edu.cn/*
 // @grant        none
 // @run-at       document-body
 // ==/UserScript==
 
-const USERSCRIPT_COMPAT_VER = 'compat.v1';
+const USERSCRIPT_COMPAT_VER = 'compat.v2';
 
 (() => {
     console.log('eutopia: begin injection');
 
-    if(!(['process.pku.edu.cn', 'process-443.w.pku.edu.cn'].includes(document.domain))) {
+    if(!(['process.pku.edu.cn', 'process-443.w.pku.edu.cn', 'wproc.pku.edu.cn'].includes(document.domain))) {
         console.error('eutopia: wrong domain');
+        return;
+    }
+    if(location.href.indexOf('/reserve/m_signIn')!==-1) {
+        console.error('eutopia: skipping signin page');
         return;
     }
 

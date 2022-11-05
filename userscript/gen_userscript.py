@@ -9,6 +9,7 @@ INPUT_DIR = Path('build')
 
 OUTPUT_DIR = Path('userscript/build')
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+BASENAME = 'all-v2'
 
 with (INPUT_DIR / 'asset-manifest.json').open() as f:
     manifest = json.load(f)
@@ -30,20 +31,20 @@ for fn in manifest['entrypoints']:
 with open('userscript/template.js') as f:
     content = f.read()
 
-with (OUTPUT_DIR / 'all.min.js').open('w') as f:
+with (OUTPUT_DIR / f'{BASENAME}.min.js').open('w') as f:
     f.write('\n'.join(js))
-with (OUTPUT_DIR / 'all.min.css').open('w') as f:
+with (OUTPUT_DIR / f'{BASENAME}.min.css').open('w') as f:
     f.write('\n'.join(css))
 
 content = (
     content
         .replace(
             '[/* INJECTION POINT: JS FILES */]',
-            json.dumps([HOST_URL + 'all.min.js'], indent=4)
+            json.dumps([HOST_URL + f'{BASENAME}.min.js'], indent=4)
         )
         .replace(
             '[/* INJECTION POINT: CSS FILES */]',
-            json.dumps([HOST_URL + 'all.min.css'], indent=4)
+            json.dumps([HOST_URL + f'{BASENAME}.min.css'], indent=4)
         )
 )
 

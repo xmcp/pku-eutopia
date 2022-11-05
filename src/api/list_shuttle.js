@@ -1,4 +1,4 @@
-import {d_to_yyyymmdd} from '../utils';
+import {d_to_yyyymmdd, eu_sys_version} from '../utils';
 import {handle_redirect, mock} from './common';
 
 function to_monday(d, week_delta) {
@@ -26,7 +26,7 @@ export async function get_list_shuttle(week_delta) {
     if(res===null) {
         res = await fetch((
             '/site/reservation/list-page'
-            +'?hall_id=13'
+            +'?hall_id=' + (eu_sys_version()===2 ? '1' : '13')
             +`&time=${monday}`
         ), {
             redirect: 'manual',

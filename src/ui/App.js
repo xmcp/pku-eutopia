@@ -6,6 +6,7 @@ import {ShuttleTable} from './ShuttleTable';
 import {ReservationView} from './ReservationView';
 import {parse_reservation, got_res_id} from '../data/reservation_parser';
 import {ConfigProvider, ConfigCtx} from '../data/config_ctx';
+import {eu_sys_version} from '../utils';
 import {About} from './About';
 
 import './App.css';
@@ -17,6 +18,28 @@ function Skeleton() {
             </div>
         </div>
     );
+}
+
+function AlertBanner() {
+    if(window.USERSCRIPT_COMPAT_VER!=='compat.v2')
+        return (
+            <div className="eu-alert-banner" onClick={()=>{
+                window.location.href = 'https://xmcp.ltd/pku-eutopia/';
+            }}>
+                更新用户脚本来使用新系统预约，点击查看方法
+            </div>
+        );
+
+    if(eu_sys_version()<2)
+        return (
+            <div className="eu-alert-banner" onClick={()=>{
+                window.location.href = '/site/pku-seal/login?targetAppId=wproc&redirect_url=https://wproc.pku.edu.cn/v2/site/index';
+            }}>
+                点击前往 wproc.pku.edu.cn 使用新预约系统
+            </div>
+        );
+
+    return null;
 }
 
 function Router() {
@@ -93,9 +116,10 @@ function Router() {
                 <About />
             }
 
-            {route!=='off' &&
+            {route!=='off' && <>
+                <AlertBanner />
                 <div className="eu-fullscreen-shadow" style={{zIndex: -1}} onClick={()=>set_route('off')} />
-            }
+            </>}
 
             <div className="eu-router-panel">
                 <div className="eu-width-container">
