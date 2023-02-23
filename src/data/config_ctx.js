@@ -1,4 +1,5 @@
 import {createContext, useState} from 'react';
+import {eu_sys_version} from '../utils';
 
 export const ConfigCtx = createContext({
     config: {},
@@ -10,6 +11,7 @@ function make_default(c) {
         location: 'cp',
         showtext: 'picked',
         show_yesterday: 'on',
+        auto_popup: eu_sys_version()===2 ? 'on' : 'off',
         ...c,
     };
 }

@@ -46,7 +46,7 @@ function Router() {
     let data = useContext(DataCtx);
     let {config} = useContext(ConfigCtx);
 
-    let [route, set_route] = useState('off');
+    let [route, set_route] = useState(config.auto_popup==='on' ? 'shuttle_table' : 'off');
 
     let shuttle_table_data = useMemo(()=>
         loaded(data.shuttle_thisweek) ?

@@ -72,6 +72,15 @@ function Preference() {
                 <b>在班车时刻中显示昨天</b>
             </label>
         </p>
+        <p><b>
+            <label>
+                <input type="checkbox" checked={config.auto_popup==='on'} onChange={(e)=>update_config({
+                    ...config,
+                    auto_popup: e.target.checked ? 'on' : 'off',
+                })} />
+                <b>插件载入后立即弹出班车时刻界面</b>
+            </label>
+        </b></p>
     </>);
 }
 
