@@ -4,12 +4,7 @@ import ReactDOM from 'react-dom/client';
 import {App} from './ui/App';
 
 import './index.css';
-
-window.EUTOPIA_RENDER_ROOT = window.EUTOPIA_USE_MOCK ?
-    document.getElementById('eu-root') :
-    document.getElementById('eutopia-mount-point').shadowRoot.getElementById('eu-root');
-
-const root = ReactDOM.createRoot(window.EUTOPIA_RENDER_ROOT);
+import {BUILD_INFO} from './utils';
 
 class ErrorBoundary extends React.Component {
     constructor(props) {
@@ -26,7 +21,7 @@ class ErrorBoundary extends React.Component {
             return (
                 <div className="eu-error">
                     <p><b>{this.state.error.toString()}</b></p>
-                    <p>Build {process.env.REACT_APP_BUILD_INFO||'---'}, Script {window.USERSCRIPT_COMPAT_VER||'---'}</p>
+                    <p>Build {BUILD_INFO}, Script {window.USERSCRIPT_COMPAT_VER||'---'}</p>
                     <p>{window.navigator.userAgent}</p>
                     <pre>{this.state.error.stack.toString()}</pre>
                 </div>

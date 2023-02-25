@@ -2,6 +2,7 @@ import {useContext} from 'react';
 
 import {SYMBOL_FAILED, DataCtx} from '../data/data_ctx';
 import {ConfigCtx} from '../data/config_ctx';
+import {BUILD_INFO} from '../utils';
 
 function LastUpdate({d}) {
     if(d===null)
@@ -138,7 +139,7 @@ export function About() {
                     {' / '}
                     <a href="https://xmcp.ltd/donate.png" target="_blank" rel="noreferrer noopener">V 我 50</a>
                 </p>
-                <p>Build {process.env.REACT_APP_BUILD_INFO||'---'}</p>
+                <p>Build {BUILD_INFO}</p>
                 <br />
             </div>
         </div>

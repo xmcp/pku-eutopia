@@ -1,3 +1,5 @@
+export const BUILD_INFO = process.env.REACT_APP_BUILD_INFO||'{-{-BUILD_INFO-}-}';
+
 export function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
 }

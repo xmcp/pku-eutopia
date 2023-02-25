@@ -1,6 +1,7 @@
 import json
 from pathlib import Path
 import shutil
+import datetime
 
 #HOST_URL = 'http://127.0.0.1/'
 HOST_URL = 'https://xmcp.ltd/pku-eutopia/'
@@ -10,9 +11,16 @@ INPUT_DIR = Path('build')
 OUTPUT_DIR = Path('userscript/build')
 OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
 BASENAME = 'all-v2'
+BUILD_INFO_MARKER = '{-{-BUILD_INFO-}-}'
 
 with (INPUT_DIR / 'asset-manifest.json').open() as f:
     manifest = json.load(f)
+
+def add_build_info(s):
+    info = datetime.datetime.now().strftime('%y%m%d.%H%M')
+    assert s.count(BUILD_INFO_MARKER) == 1
+    print('build info:', info)
+    return s.replace(BUILD_INFO_MARKER, info)
 
 js = []
 css = []
@@ -31,10 +39,13 @@ for fn in manifest['entrypoints']:
 with open('userscript/template.js') as f:
     content = f.read()
 
+js = add_build_info('\n'.join(js))
+css = '\n'.join(css)
+
 with (OUTPUT_DIR / f'{BASENAME}.min.js').open('w') as f:
-    f.write('\n'.join(js))
+    f.write(js)
 with (OUTPUT_DIR / f'{BASENAME}.min.css').open('w') as f:
-    f.write('\n'.join(css))
+    f.write(css)
 
 content = (
     content
