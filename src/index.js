@@ -32,10 +32,29 @@ class ErrorBoundary extends React.Component {
     }
 }
 
-root.render(
-  <React.StrictMode>
-      <ErrorBoundary>
-          <App />
-      </ErrorBoundary>
-  </React.StrictMode>
-);
+function inject() {
+    if(window.EUTOPIA_RENDER_ROOT) {
+        console.log('entupia: render root already exists');
+        return;
+    }
+
+    window.EUTOPIA_RENDER_ROOT = window.EUTOPIA_USE_MOCK ?
+        document.getElementById('eu-root') :
+        document.getElementById('eutopia-mount-point').shadowRoot.getElementById('eu-root');
+
+    if(window.EUTOPIA_RENDER_ROOT.innerHTML!=='') {
+        console.log('entupia: render root not empty');
+        return;
+    }
+
+    const root = ReactDOM.createRoot(window.EUTOPIA_RENDER_ROOT);
+    root.render(
+      <React.StrictMode>
+          <ErrorBoundary>
+              <App />
+          </ErrorBoundary>
+      </React.StrictMode>
+    );
+}
+
+inject();
