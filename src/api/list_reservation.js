@@ -7,9 +7,12 @@ export async function get_list_reservation() {
     }
     if(res===null) {
         res = await fetch((
-            '/site/reservation/my-list'
+            '/site/reservation/my-list-time'
             +'?p=1'
             +'&page_size=50'
+            +'&status=0'
+            +'&sort_time=true'
+            +'&sort=desc'
         ), {
             redirect: 'manual',
         });

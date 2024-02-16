@@ -2,7 +2,7 @@ import {useContext} from 'react';
 
 import {d_to_yyyymmdd, hhmm_to_int} from '../utils';
 import {ConfigCtx} from './config_ctx';
-import {reservation_status, normalize_track_name} from './common';
+import {reservation_status, normalize_track_name, parse_period_text} from './common';
 
 let DIR_INDEX = {'toyy': 0, 'tocp': 1};
 let DIR_KEYS_FROM_API = {'昌平新校区': 'toyy', '燕园校区': 'tocp'};
@@ -149,7 +149,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
     for(let r of d_reservations) {
         let status = reservation_status(r);
         if(status!=='revoked') {
-            let k = r.period_text.trim();
+            let k = parse_period_text(r.periodList);
             if(!reserved[k])
                 reserved[k] = {};
             reserved[k][r.resource_id] = {id: r.id, status: status};

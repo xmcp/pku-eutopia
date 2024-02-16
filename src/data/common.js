@@ -1,6 +1,6 @@
 import {str_count, sleep} from '../utils';
 
-function parse_period_text(t) {
+function period_text_to_date(t) {
     if((typeof t)!=='string')
         return null;
 
@@ -15,6 +15,10 @@ function parse_period_text(t) {
     return d;
 }
 
+export function parse_period_text(pl) {
+    return pl[0].time.trim();
+}
+
 const SIGNIN_TIME_ALLOWANCE_BEFORE = 61*60*1000;
 const SIGNIN_TIME_ALLOWANCE_AFTER = 41*60*1000;
 
@@ -25,7 +29,7 @@ export function reservation_status(r) {
         return 'finished';
     else if(r.status_name==='已预约') {
         let cur_time = +new Date();
-        let d = parse_period_text(r.period_text);
+        let d = period_text_to_date(parse_period_text(r.periodList));
         let sign_time = d ? (+d) : 0;
 
         if(sign_time && cur_time<sign_time+SIGNIN_TIME_ALLOWANCE_AFTER && cur_time>sign_time-SIGNIN_TIME_ALLOWANCE_BEFORE)

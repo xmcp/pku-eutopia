@@ -1,4 +1,4 @@
-import {reservation_status, normalize_track_name} from './common';
+import {reservation_status, normalize_track_name, parse_period_text} from './common';
 
 window._res_id_set = null;
 export function got_res_id() {
@@ -36,7 +36,7 @@ export function parse_reservation(d_shuttles, d_reservations) {
             track_name: normalize_track_name(r.resource_name),
             res_id: r.id,
 
-            datetime: r.period_text.trim(),
+            datetime: parse_period_text(r.periodList),
 
             status: status,
         }
