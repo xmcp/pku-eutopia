@@ -8,7 +8,7 @@ function to_monday(d, week_delta) {
     if (dow===0)
         dow = 7;
 
-    let monday = new Date(d - 86400*1000 - (dow-1)*86400*1000 + week_delta*7*86400*1000);
+    let monday = new Date(d - (dow - 1 - week_delta*7)*86400*1000);
     return d_to_yyyymmdd(monday);
 }
 
