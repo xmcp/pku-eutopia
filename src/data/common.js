@@ -19,8 +19,8 @@ export function parse_period_text(pl) {
     return pl[0].time.trim();
 }
 
-const SIGNIN_TIME_ALLOWANCE_BEFORE = 61*60*1000;
-const SIGNIN_TIME_ALLOWANCE_AFTER = 41*60*1000;
+const SIGNIN_TIME_ALLOWANCE_BEFORE = 31*60*1000;
+const SIGNIN_TIME_ALLOWANCE_AFTER = 31*60*1000;
 
 export function reservation_status(r) {
     if(r.status_name==='已撤销')
