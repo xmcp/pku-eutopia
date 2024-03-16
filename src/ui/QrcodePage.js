@@ -1,5 +1,8 @@
-import {useState, useEffect, useContext} from 'react';
-import QRCode from "react-qr-code";
+import { createElement } from 'preact';
+import {useState, useEffect, useContext} from 'preact/hooks';
+import * as hooks from 'preact/hooks';
+import { generate } from 'lean-qr';
+import { makeAsyncComponent } from 'lean-qr/extras/react';
 
 import {get_res_qrcode, get_temp_qrcode} from '../api/get_qrcode';
 import {with_retry} from '../data/common';
@@ -7,6 +10,8 @@ import {manual_signin} from '../api/action';
 import {DataCtx} from '../data/data_ctx';
 
 import './QrcodePage.css';
+
+const QR = makeAsyncComponent({ createElement, ...hooks }, generate);
 
 function QrcodeWidget({load_fn, text_processing, navigate}) {
     let [status, set_status] = useState('loading');
@@ -53,7 +58,7 @@ function QrcodeWidget({load_fn, text_processing, navigate}) {
         <div className="eu-qrcode-widget-frame">
             {text_processing(res)}
             <div className="eu-qrcode-img">
-                <QRCode value={res.code} />
+                <QR content={res.code} />
             </div>
             <p>
                 <button onClick={()=>{

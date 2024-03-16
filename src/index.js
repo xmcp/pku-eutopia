@@ -1,12 +1,11 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
+import {render, Component} from 'preact';
 
 import {App} from './ui/App';
 
 import './index.css';
 import {BUILD_INFO} from './utils';
 
-class ErrorBoundary extends React.Component {
+class ErrorBoundary extends Component {
     constructor(props) {
         super(props);
         this.state = { error: null };
@@ -47,14 +46,11 @@ function inject() {
         return;
     }
 
-    const root = ReactDOM.createRoot(window.EUTOPIA_RENDER_ROOT);
-    root.render(
-      <React.StrictMode>
-          <ErrorBoundary>
-              <App />
-          </ErrorBoundary>
-      </React.StrictMode>
-    );
+    render((
+      <ErrorBoundary>
+          <App />
+      </ErrorBoundary>
+    ), window.EUTOPIA_RENDER_ROOT);
 }
 
 inject();

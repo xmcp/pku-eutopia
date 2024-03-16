@@ -1,6 +1,7 @@
 node_modules
 /public/mock
 /.idea
-build
+dist
 npm-debug.log*
 /userscript/index.html
+/userscript/build

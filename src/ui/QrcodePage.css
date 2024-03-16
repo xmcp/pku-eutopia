@@ -32,6 +32,10 @@
     box-sizing: content-box;
 }
 
+.eu-qrcode-img canvas {
+    width: 100%;
+}
+
 .eu-qrcode-widget-frame button {
     font-size: 1.25em;
     min-width: 6em;
