@@ -37,9 +37,7 @@ function inject() {
         return;
     }
 
-    window.EUTOPIA_RENDER_ROOT = window.EUTOPIA_USE_MOCK ?
-        document.getElementById('eu-root') :
-        document.getElementById('eutopia-mount-point').shadowRoot.getElementById('eu-root');
+    window.EUTOPIA_RENDER_ROOT = document.getElementById('eutopia-mount-point').shadowRoot.getElementById('eu-root');
 
     if(window.EUTOPIA_RENDER_ROOT.innerHTML!=='') {
         console.log('entupia: render root not empty');

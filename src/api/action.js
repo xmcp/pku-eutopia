@@ -2,7 +2,7 @@ import {sleep} from '../utils';
 import {handle_redirect, mock} from './common';
 
 export async function reserve(track_id, date_str, time_id) {
-    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
         alert(`mocked reserve: ${track_id}, ${date_str}, ${time_id}`);
         await mock(null);
         return;
@@ -37,7 +37,7 @@ export async function reserve(track_id, date_str, time_id) {
 }
 
 export async function revoke(res_id) {
-    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
         alert(`mocked revoke: ${res_id}`);
         await mock(null);
         return;

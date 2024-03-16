@@ -106,7 +106,7 @@ export function About() {
                 <br />
 
                 <h1 className="eu-title">数据状态</h1>
-                {!!(window.EUTOPIA_USE_MOCK && process.env.NODE_ENV!=='production') &&
+                {!!(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) &&
                     <p><b>USING MOCK DATA.</b></p>
                 }
                 <p>

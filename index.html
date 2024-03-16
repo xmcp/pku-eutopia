@@ -17,7 +17,22 @@
         window.EUTOPIA_MOCK_DATE = new Date('2024-03-16');
         window.USERSCRIPT_COMPAT_VER = 'compat.v2';
     </script>
-    <div id="eu-root"></div>
+    <div id="eutopia-mount-point"></div>
+    <script>
+        let container = document.createElement('div');
+        container.id = 'eutopia-mount-point';
+        container.style.fontFamily = 'initial';
+        container.style.fontSize = '14px';
+        container.style.lineHeight = 'initial';
+        container.style.color = 'black';
+        document.body.appendChild(container);
+
+        let shadow = container.attachShadow({mode: 'open'});
+
+        let root = document.createElement('div');
+        root.id = 'eu-root';
+        shadow.appendChild(root);
+    </script>
     <script type="module" src="/src/index.js"></script>
 </body>
 </html>

@@ -2,7 +2,7 @@ import {mock, handle_redirect} from './common';
 
 export async function get_res_qrcode(reservation) {
     let res = null;
-    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
         res = await mock('/mock/get_res_qrcode.json');
     }
     if(res===null) {
@@ -27,7 +27,7 @@ export async function get_res_qrcode(reservation) {
 
 export async function get_temp_qrcode(track_id, time_text) {
     let res = null;
-    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
         res = await mock('/mock/get_temp_qrcode.json');
     }
     if(res===null) {

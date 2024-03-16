@@ -16,7 +16,7 @@ export async function get_list_shuttle(week_delta) {
     let monday = to_monday(new Date(), week_delta);
 
     let res = null;
-    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
         if(week_delta===0)
             res = await mock('/mock/mocked_list_shuttle_thisweek.json');
         else if(week_delta===1)

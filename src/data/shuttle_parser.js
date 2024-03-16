@@ -32,7 +32,10 @@ function date_key(s) { // yyyy-mm-dd
 function filter_dates(ds, show_yesterday) {
     //return Array.from(ds); /////
 
-    let today_ts = window.EUTOPIA_USE_MOCK ? +(window.EUTOPIA_MOCK_DATE) :  +(new Date());
+    let today_ts = +(new Date());
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
+        today_ts = +(window.EUTOPIA_MOCK_DATE);
+    }
 
     let whitelist = new Set();
     for(let delta = show_yesterday ? -1 : 0; delta<=7; delta++)

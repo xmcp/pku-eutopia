@@ -2,7 +2,7 @@ import {handle_redirect, mock} from './common';
 
 export async function get_list_reservation() {
     let res = null;
-    if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
         res = await mock('/mock/mocked_list_reservation.json');
     }
     if(res===null) {
