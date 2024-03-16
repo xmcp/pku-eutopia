@@ -1,65 +1,20 @@
-import {useState, useContext} from 'react';
+import {useContext, useState} from 'react';
 
 import {STATUS_MAGIC_NUMBER, STATUS_DESC} from '../data/shuttle_parser';
-import {reserve, revoke, signin} from '../api/action';
-import {DataCtx} from '../data/data_ctx';
+import {reserve, revoke} from '../api/action';
 import {ConfigCtx} from '../data/config_ctx';
+import {DataCtx} from '../data/data_ctx';
 
 import './ShuttleDetail.css';
 
-export function ShuttleDetail({cell, close}) {
+export function ShuttleDetail({cell, close, navigate}) {
     let data = useContext(DataCtx);
     let {config} = useContext(ConfigCtx);
     let [loading, set_loading] = useState(false);
 
     function get_action(track) {
-        let action_cmd = async () => await reserve(track.track_id, track.date, track.time_id);
-        let action_semantic = 'primary';
-        let action_text = '预约';
-
-        if(track.picked) {
-            if(track.picked.status==='finished') {
-                action_cmd = null;
-                action_semantic = 'disabled';
-                action_text = '已签到';
-            } else if(track.picked.status==='pending_revokable') {
-                action_cmd = async () => await revoke(track.picked.id);
-                action_semantic = 'danger';
-                action_text = '撤销';
-            } else if(track.picked.status==='finished_absent') {
-                action_cmd = null;
-                action_semantic = 'disabled';
-                action_text = '已违约';
-            } else if(track.picked.status==='pending_signable') {
-                action_cmd = async () => await signin(track.track_id);
-                action_semantic = 'primary';
-                action_text = '签到';
-            } else if(track.picked.status==='pending' || track.picked.status==='pending_unkown') {
-                action_cmd = null;
-                action_semantic = 'disabled';
-                action_text = '已预约';
-            } else if(track.picked.status==='revoked') {
-                // do nothing, because revoked tracks can be reserved again
-            }
-        } else { // not revoked
-            if(track.status_id!==STATUS_MAGIC_NUMBER.AVAILABLE) {
-                action_cmd = null;
-                action_semantic = 'disabled';
-                action_text = STATUS_DESC[track.status_id];
-            }
-        }
-
-        return [action_cmd, action_semantic, action_text];
-    }
-
-    function wrapped(action, target, fn, need_confirm) {
-        return async ()=>{
-            if(loading)
-                return;
-            if(fn===null)
-                return;
-
-            if(!need_confirm || window.confirm(`要【${action}】${target} 的班车吗？`)) {
+        function action_do_fn(verb, fn) {
+            return async ()=>{
                 set_loading(true);
                 try {
                     await fn();
@@ -67,11 +22,49 @@ export function ShuttleDetail({cell, close}) {
                     data.reload_all(true);
                 } catch(e) {
                     console.error(e);
-                    window.alert(`${action}失败，${e}`);
+                    window.alert(`${verb}失败，${e}`);
                 }
                 set_loading(false);
             }
-        };
+        }
+
+        function action_show_temp_qrcode() {
+            navigate('qrcode', {type: 'temp', track_id: track.track_id, time_text: track.time_text});
+        }
+
+        let action_cmd = action_do_fn('预约', ()=>reserve(track.track_id, track.date, track.time_id));
+        let action_semantic = 'default';
+        let action_text = '预约';
+
+        if(track.picked) {
+            if(track.picked.status==='finished') {
+                action_cmd = action_show_temp_qrcode;
+                action_semantic = 'disabled';
+                action_text = '已签到';
+            } else if(track.picked.status==='pending_revokable') {
+                action_cmd = action_do_fn('撤销', ()=>revoke(track.picked.res_id));
+                action_semantic = 'danger';
+                action_text = '撤销';
+            } else if(track.picked.status==='pending_signable' || track.picked.status==='pending') {
+                action_cmd = () => navigate('qrcode', {type: 'reservation', reservation: track.picked});
+                action_semantic = 'primary';
+                action_text = '签到';
+            } else if(track.picked.status==='finished_absent') {
+                action_cmd = action_show_temp_qrcode;
+                action_semantic = 'disabled';
+                action_text = '已违约';
+            } else if(track.picked.status==='revoked') {
+                // do nothing, because revoked tracks can be reserved again
+            }
+        } else { // not revoked
+            if(track.status_id!==STATUS_MAGIC_NUMBER.AVAILABLE) {
+                action_cmd = action_show_temp_qrcode;
+                action_semantic = 'disabled';
+                action_text = STATUS_DESC[track.status_id];
+            }
+        }
+
+        return [action_cmd, action_semantic, action_text];
     }
 
     return (<>
@@ -91,9 +84,9 @@ export function ShuttleDetail({cell, close}) {
                         </div>
                         <div
                             className={'eu-shuttle-detail-action eu-shuttle-detail-action-'+action_semantic}
-                            onClick={wrapped(action_text, track.track_name, action_cmd, action_semantic==='danger')}
+                            onClick={()=>{if(!loading) action_cmd();}}
                         >
-                            <div className="eu-shuttle-detail-action-title">{action_text}</div>
+                            <div className="eu-shuttle-detail-action-title">{action_text}{loading ? '中' : ''}</div>
                             <div className="eu-shuttle-detail-action-desc">
                                 {config.showtext==='picked' ? <>已约 {track.capacity - track.left}</> : <>剩余 {track.left}</>}
                                 {' / '}{track.capacity}

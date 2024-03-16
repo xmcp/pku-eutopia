@@ -29,5 +29,5 @@ export function range0(r) {
 }
 
 export function eu_sys_version() {
-    return document.domain==='wproc.pku.edu.cn' ? 2 : 1;
+    return (window.location.hostname==='wproc.pku.edu.cn' || window.EUTOPIA_USE_MOCK) ? 2 : 1;
 }

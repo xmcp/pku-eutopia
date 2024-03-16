@@ -1,4 +1,4 @@
-import {useContext, useMemo, useState, useEffect} from 'react';
+import {useContext, useMemo, useState, useEffect, useCallback} from 'react';
 
 import {DataProvider, DataCtx, with_fallback, loaded, SYMBOL_FAILED} from '../data/data_ctx';
 import {parse_shuttle} from '../data/shuttle_parser';
@@ -8,6 +8,7 @@ import {parse_reservation, got_res_id} from '../data/reservation_parser';
 import {ConfigProvider, ConfigCtx} from '../data/config_ctx';
 import {eu_sys_version} from '../utils';
 import {About} from './About';
+import {QrcodePage} from './QrcodePage';
 
 import './App.css';
 
@@ -46,7 +47,7 @@ function Router() {
     let data = useContext(DataCtx);
     let {config} = useContext(ConfigCtx);
 
-    let [route, set_route] = useState(config.auto_popup==='on' ? 'shuttle_table' : 'off');
+    let [route, set_route] = useState(config.auto_popup==='on' ? {view: 'shuttle_table'} : {view: 'off'});
 
     let shuttle_table_data = useMemo(()=>
         loaded(data.shuttle_thisweek) ?
@@ -64,22 +65,44 @@ function Router() {
             null
     , [data.shuttle_thisweek, data.reservation]);
 
-    function navigate(target) {
-        set_route(r => r===target ? 'off' : target);
-    }
+    const navigate = useCallback((target, args)=>{
+        set_route(r => {
+            let new_r = {...args, view: target};
+            return r.view===new_r.view ? {view: 'off'} : new_r;
+        });
+    }, []);
 
     function sel_cls(target) {
-        return route===target ? ' eu-pill-item-selected' : '';
+        return route.view===target ? ' eu-pill-item-selected' : '';
     }
 
     useEffect(()=>{
-        if(route!=='off') {
+        if(route.view!=='off') {
             window.EUTOPIA_RENDER_ROOT.classList.add('eu-open');
             return ()=>{
                 window.EUTOPIA_RENDER_ROOT.classList.remove('eu-open');
             }
         }
-    }, [route]);
+    }, [route.view]);
+
+    useEffect(()=>{
+        if(window._eu_signin_popped) return;
+        if(reservation_data) {
+            window._eu_signin_popped = true;
+            if(config.auto_popup) {
+                let target = null;
+                for(let r of reservation_data.pending) {
+                    if(r.status==='pending_signable') {
+                        if(target) // ignore auto signin if multiple targets
+                            return;
+                        target = r;
+                    }
+                }
+                if(target)
+                    navigate('qrcode', {type: 'reservation', reservation: target});
+            }
+        }
+    }, [config.auto_popup, reservation_data, navigate]);
 
     let loaded_cnt = 0;
     let has_failure = false;
@@ -106,19 +129,22 @@ function Router() {
 
     return (
         <>
-            {route==='shuttle_table' &&
-                (shuttle_table_data ? <ShuttleTable data={shuttle_table_data} /> : <Skeleton />)
+            {route.view==='shuttle_table' &&
+                (shuttle_table_data ? <ShuttleTable data={shuttle_table_data} navigate={navigate} /> : <Skeleton />)
             }
-            {route==='reservation' &&
-                (reservation_data ? <ReservationView data={reservation_data} /> : <Skeleton />)
+            {route.view==='reservation' &&
+                (reservation_data ? <ReservationView data={reservation_data} navigate={navigate} /> : <Skeleton />)
             }
-            {route==='about' &&
+            {route.view==='about' &&
                 <About />
             }
+            {route.view==='qrcode' &&
+                <QrcodePage route={route} navigate={navigate} />
+            }
 
-            {route!=='off' && <>
+            {route.view!=='off' && <>
                 <AlertBanner />
-                <div className="eu-fullscreen-shadow" style={{zIndex: -1}} onClick={()=>set_route('off')} />
+                <div className="eu-fullscreen-shadow" style={{zIndex: -1}} onClick={()=>navigate('off')} />
             </>}
 
             <div className="eu-router-panel">

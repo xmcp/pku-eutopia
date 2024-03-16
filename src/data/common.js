@@ -22,7 +22,7 @@ export function parse_period_text(pl) {
 const SIGNIN_TIME_ALLOWANCE_BEFORE = 31*60*1000;
 const SIGNIN_TIME_ALLOWANCE_AFTER = 31*60*1000;
 
-export function reservation_status(r) {
+function reservation_status(r) {
     if(r.status_name==='已撤销')
         return 'revoked';
     else if(r.status_name==='已签到')
@@ -57,6 +57,19 @@ export function normalize_track_name(s) {
         s = s.replace(from, to);
     }
     return s;
+}
+
+export function reservation_info(r) {
+    return {
+        track_id: r.resource_id,
+        track_name: normalize_track_name(r.resource_name),
+        res_id: r.id,
+        appointment_id: r.hall_appointment_data_id,
+
+        datetime: parse_period_text(r.periodList),
+
+        status: reservation_status(r),
+    }
 }
 
 export async function with_retry(fn) {

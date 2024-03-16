@@ -68,7 +68,7 @@ function CellGroupedRow({cells, cols, y_offset, open_detail, cur_detail}) {
     );
 }
 
-export function ShuttleTable({data}) {
+export function ShuttleTable({data, navigate}) {
     let [detail, set_detail] = useState(null);
 
     let canvas_height = data.yaxis.max_offset + PILL_HEIGHT;
@@ -146,7 +146,7 @@ export function ShuttleTable({data}) {
         </div>
 
         {detail!==null &&
-            <ShuttleDetail cell={detail} close={()=>set_detail(null)} />
+            <ShuttleDetail cell={detail} close={()=>set_detail(null)} navigate={navigate} />
         }
     </>);
 }

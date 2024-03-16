@@ -1,17 +1,17 @@
-import {reservation_status, normalize_track_name, parse_period_text} from './common';
+import {reservation_info} from './common';
 
-window._res_id_set = null;
+window._eu_res_id_set = null;
 export function got_res_id() {
-    return window._res_id_set!==null;
+    return window._eu_res_id_set!==null;
 }
 function save_res_id(s) {
     window._res_id_set = s;
 }
 
 export function parse_reservation(d_shuttles, d_reservations) {
-    // collect resource ids so we know what are tracks
+    // collect resource ids so we know what are shuttle tracks
 
-    let res_id = window._res_id_set;
+    let res_id = window._eu_res_id_set;
 
     if(res_id===null) {
         res_id = new Set();
@@ -30,18 +30,9 @@ export function parse_reservation(d_shuttles, d_reservations) {
         if(!res_id.has(r.resource_id)) // other registration, not shuttle
             continue;
 
-        let status = reservation_status(r);
-        let info = {
-            track_id: r.resource_id,
-            track_name: normalize_track_name(r.resource_name),
-            res_id: r.id,
+        let info =  reservation_info(r);
 
-            datetime: parse_period_text(r.periodList),
-
-            status: status,
-        }
-
-        if(status==='pending' || status==='pending_revokable' || status==='pending_signable')
+        if(info.status==='pending' || info.status==='pending_revokable' || info.status==='pending_signable')
             pending.push(info);
         else
             done.push(info);

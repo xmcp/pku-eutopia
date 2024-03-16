@@ -37,6 +37,7 @@
     height: 3.5em;
     border-radius: 1.75em;
     box-shadow: 0 0 3px rgba(0, 0, 0, .5);
+    cursor: pointer;
 }
 
 .eu-shuttle-detail-action-title {
@@ -52,16 +53,18 @@
 .eu-shuttle-detail-action-primary {
     background-color: darkblue;
     color: white;
-    cursor: pointer;
 }
 .eu-shuttle-detail-action-danger {
     background-color: darkred;
     color: white;
-    cursor: pointer;
 }
 .eu-shuttle-detail-action-disabled {
     background-color: lightgray;
     color: black;
-    cursor: not-allowed;
-    box-shadow: unset;
+    outline: 1px solid #777;
+}
+.eu-shuttle-detail-action-default {
+    background-color: lightyellow;
+    color: black;
+    outline: 1px solid black;
 }

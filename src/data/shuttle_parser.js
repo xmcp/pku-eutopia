@@ -2,7 +2,7 @@ import {useContext} from 'react';
 
 import {d_to_yyyymmdd, hhmm_to_int} from '../utils';
 import {ConfigCtx} from './config_ctx';
-import {reservation_status, normalize_track_name, parse_period_text} from './common';
+import {normalize_track_name, reservation_info} from './common';
 
 let DIR_INDEX = {'toyy': 0, 'tocp': 1};
 let DIR_KEYS_FROM_API = {'昌平新校区': 'toyy', '燕园校区': 'tocp'};
@@ -32,7 +32,7 @@ function date_key(s) { // yyyy-mm-dd
 function filter_dates(ds, show_yesterday) {
     //return Array.from(ds); /////
 
-    let today_ts = window.EUTOPIA_USE_MOCK ? +(new Date('2022-09-17')) :  +(new Date());
+    let today_ts = window.EUTOPIA_USE_MOCK ? +(window.EUTOPIA_MOCK_DATE) :  +(new Date());
 
     let whitelist = new Set();
     for(let delta = show_yesterday ? -1 : 0; delta<=7; delta++)
@@ -147,12 +147,12 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
     let reserved = {};
 
     for(let r of d_reservations) {
-        let status = reservation_status(r);
-        if(status!=='revoked') {
-            let k = parse_period_text(r.periodList);
+        let info = reservation_info(r);
+        if(info.status!=='revoked') {
+            let k = info.datetime;
             if(!reserved[k])
                 reserved[k] = {};
-            reserved[k][r.resource_id] = {id: r.id, status: status};
+            reserved[k][info.track_id] = info;
         }
     }
 
@@ -224,6 +224,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
 
                         date: point.date,
                         time_id: point.time_id,
+                        time_text: point.yaxis,
                     };
 
                     let dkey = DIR_KEYS_FROM_API[track.json_address.campus_name];

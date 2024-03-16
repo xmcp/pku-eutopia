@@ -26,7 +26,7 @@ export async function mock(url) {
 
     await sleep(750+randint(750));
 
-    if(randint(3)===0)
+    if(window.EUTOPIA_MOCK_NETWORK_ERROR && randint(3)===0)
         throw new Error('mocked network error');
 
     if(url!==null)

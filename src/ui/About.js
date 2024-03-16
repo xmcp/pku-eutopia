@@ -79,7 +79,7 @@ function Preference() {
                     ...config,
                     auto_popup: e.target.checked ? 'on' : 'off',
                 })} />
-                <b>插件载入后立即弹出班车时刻界面</b>
+                <b>插件载入后立即弹出签到界面或班车时刻</b>
             </label>
         </b></p>
     </>);
@@ -133,8 +133,6 @@ export function About() {
 
                 <h1 className="eu-title">链接</h1>
                 <p>
-                    <a href="/v2/matter/start?id=475" target="_blank" rel="noreferrer noopener">班车申诉表单</a>
-                    {' / '}
                     <a href="https://github.com/xmcp/pku-eutopia" target="_blank" rel="noreferrer noopener">在 GitHub 开源</a>
                     {' / '}
                     <a href="https://xmcp.ltd/donate.png" target="_blank" rel="noreferrer noopener">V 我 50</a>

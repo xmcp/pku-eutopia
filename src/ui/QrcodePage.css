@@ -1,0 +1,43 @@
+.eu-qrcode-widget-frame {
+    text-align: center;
+    padding: 2em 0;
+}
+
+.eu-qrcode-table {
+    width: 256px;
+    margin: auto;
+    text-align: left;
+}
+
+.eu-paper-pku {
+    background-color: #f2f2f2 !important;
+}
+
+.eu-title-pku {
+    color: #8c0000;
+}
+
+.eu-title-pku small {
+    font-size: .6em;
+    font-weight: normal;
+    color: #8c0000 !important;
+    opacity: .8;
+}
+
+.eu-qrcode-img {
+    padding: .5em;
+    background-color: white;
+    width: 256px;
+    margin: 2em auto;
+    box-sizing: content-box;
+}
+
+.eu-qrcode-widget-frame button {
+    font-size: 1.25em;
+    min-width: 6em;
+    background-color: #8c0000;
+    color: white;
+    border-radius: 4px;
+    line-height: 2em;
+    border: unset;
+}

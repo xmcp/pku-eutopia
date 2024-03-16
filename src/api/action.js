@@ -3,6 +3,7 @@ import {handle_redirect, mock} from './common';
 
 export async function reserve(track_id, date_str, time_id) {
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+        alert(`mocked reserve: ${track_id}, ${date_str}, ${time_id}`);
         await mock(null);
         return;
     }
@@ -37,6 +38,7 @@ export async function reserve(track_id, date_str, time_id) {
 
 export async function revoke(res_id) {
     if(process.env.NODE_ENV!=='production') if(window.EUTOPIA_USE_MOCK) {
+        alert(`mocked revoke: ${res_id}`);
         await mock(null);
         return;
     }
@@ -62,7 +64,7 @@ export async function revoke(res_id) {
     //window.alert(data.m);
 }
 
-export async function signin(id) {
+export async function manual_signin(id) {
     window.open('/v2/reserve/m_signIn?id='+encodeURIComponent(id));
     await sleep(1000); // reload data after popup is fully loaded
 }
