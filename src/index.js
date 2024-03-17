@@ -37,7 +37,11 @@ function inject() {
         return;
     }
 
-    window.EUTOPIA_RENDER_ROOT = document.getElementById('eutopia-mount-point').shadowRoot.getElementById('eu-root');
+    if(process.env.NODE_ENV==='production') {
+        window.EUTOPIA_RENDER_ROOT = document.getElementById('eutopia-mount-point').shadowRoot.getElementById('eu-root');
+    } else {
+        window.EUTOPIA_RENDER_ROOT = document.getElementById('eu-root');
+    }
 
     if(window.EUTOPIA_RENDER_ROOT.innerHTML!=='') {
         console.log('entupia: render root not empty');
