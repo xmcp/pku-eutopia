@@ -69,6 +69,7 @@ export function reservation_info(r) {
         datetime: parse_period_text(r.periodList),
 
         status: reservation_status(r),
+        revokable: r.is_cancel,
     }
 }
 

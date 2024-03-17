@@ -6,7 +6,7 @@ import { makeAsyncComponent } from 'lean-qr/extras/react';
 
 import {get_res_qrcode, get_temp_qrcode} from '../api/get_qrcode';
 import {with_retry} from '../data/common';
-import {manual_signin} from '../api/action';
+import {manual_signin, revoke} from '../api/action';
 import {DataCtx} from '../data/data_ctx';
 
 import './QrcodePage.css';
@@ -80,6 +80,29 @@ function QrcodeReservation({reservation, navigate}) {
                 <br />
                 <h1 className="eu-title eu-title-pku">
                     预约签到
+                    {!!reservation.revokable &&
+                        <small>
+                            {/* eslint-disable-next-line */}
+                            <a onClick={async () => {
+                                if(loading) return;
+
+                                if(window.confirm('要撤销预约吗？')) {
+                                    set_loading(true);
+                                    try {
+                                        await revoke(reservation.res_id);
+                                        data.reload_all(true);
+                                        navigate('shuttle_table');
+                                    } catch(e) {
+                                        console.error(e);
+                                        window.alert(`撤销预约失败，${e}`);
+                                    }
+                                    set_loading(false);
+                                }
+                            }}>
+                                &emsp;→ 撤销预约
+                            </a>
+                        </small>
+                    }
                     {reservation.status==='pending_signable' &&
                         <small>
                             {/* eslint-disable-next-line */}
