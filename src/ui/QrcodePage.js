@@ -103,9 +103,8 @@ function QrcodeReservation({reservation, navigate}) {
                             </a>
                         </small>
                     }
-                    {reservation.status==='pending_signable' &&
+                    {/*reservation.status==='pending_signable' &&
                         <small>
-                            {/* eslint-disable-next-line */}
                             <a onClick={async () => {
                                 if(loading) return;
 
@@ -125,7 +124,7 @@ function QrcodeReservation({reservation, navigate}) {
                                 &emsp;→ 手动签到
                             </a>
                         </small>
-                    }
+                    */}
                 </h1>
 
                 <QrcodeWidget
