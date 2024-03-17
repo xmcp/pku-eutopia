@@ -6,7 +6,7 @@ import { makeAsyncComponent } from 'lean-qr/extras/react';
 
 import {get_res_qrcode, get_temp_qrcode} from '../api/get_qrcode';
 import {with_retry} from '../data/common';
-import {manual_signin, revoke} from '../api/action';
+import {revoke} from '../api/action';
 import {DataCtx} from '../data/data_ctx';
 
 import './QrcodePage.css';
