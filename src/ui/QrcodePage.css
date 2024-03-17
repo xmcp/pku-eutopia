@@ -4,7 +4,7 @@
 }
 
 .eu-qrcode-table {
-    width: 256px;
+    width: 300px;
     margin: auto;
     text-align: left;
 }
@@ -17,6 +17,10 @@
     color: #8c0000;
 }
 
+.eu-title a {
+    cursor: pointer;
+}
+
 .eu-title-pku small {
     font-size: .6em;
     font-weight: normal;
@@ -25,9 +29,8 @@
 }
 
 .eu-qrcode-img {
-    padding: .5em;
     background-color: white;
-    width: 256px;
+    width: 300px;
     margin: 2em auto;
     box-sizing: content-box;
 }
