@@ -26,9 +26,9 @@
 
 首先安装一个用户脚本管理器：
 
-- PC 用户推荐使用 [Tampermonkey](https://www.tampermonkey.net/)。
-- iOS / macOS 用户推荐使用 [Userscripts](https://apps.apple.com/cn/app/userscripts/id1463298887)，请参阅 [该项目的 README](https://github.com/quoid/userscripts#usage)。
-- Android 用户推荐使用支持插件的浏览器（例如 Kiwi、Yandex Browser、Firefox Nightly）然后安装 Tampermonkey 等插件，请注意 [Firefox Nightly 需要经过复杂的设置才能安装 Tampermonkey](https://enux.pl/article/en/2021-03-14/how-use-tampermonkey-firefox-mobile)。
+- 电脑端 Chrome / Edge / Firefox 用户推荐使用 [Tampermonkey](https://www.tampermonkey.net/)。
+- iOS / macOS Safari 用户推荐使用 [Userscripts](https://apps.apple.com/cn/app/userscripts/id1463298887)，请参阅 [该项目的 README](https://github.com/quoid/userscripts#usage)。
+- Android 用户推荐安装 Firefox 浏览器然后使用 [Tampermonkey](https://addons.mozilla.org/en-US/android/addon/tampermonkey/)，你也可以使用其他支持插件或者用户脚本的浏览器（例如 Via、Kiwi、Yandex Browser）。
 
 然后将 [https://xmcp.ltd/pku-eutopia/eutopia.user.js](https://xmcp.ltd/pku-eutopia/eutopia.user.js) 添加到用户脚本管理器中，即安装完成。
 
