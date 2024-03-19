@@ -20,6 +20,10 @@ def add_build_info(s):
     print('build info:', info)
     return s.replace(BUILD_INFO_MARKER, info)
 
+def wrap_js(s):
+    # wrap js code in iife to avoid polluting global namespace
+    return '(()=>{%s})()'%s
+
 js = []
 css = []
 
@@ -35,7 +39,7 @@ for p_src in INPUT_DIR.glob('assets/*.css'):
 with open('userscript/template.js') as f:
     content = f.read()
 
-js = add_build_info('\n'.join(js))
+js = wrap_js(add_build_info('\n'.join(js)))
 css = '\n'.join(css)
 
 with open(OUTPUT_DIR / f'{BASENAME}.min.js', 'w', encoding='utf-8') as f:
