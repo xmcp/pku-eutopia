@@ -4,8 +4,12 @@ import {d_to_yyyymmdd, hhmm_to_int} from '../utils';
 import {ConfigCtx} from './config_ctx';
 import {normalize_track_name, reservation_info} from './common';
 
-let DIR_INDEX = {'toyy': 0, 'tocp': 1};
-let DIR_KEYS_FROM_API = {'昌平新校区': 'toyy', '燕园校区': 'tocp'};
+const DIR_INDEX = {'toyy': 0, 'tocp': 1};
+const DIR_KEYS_FROM_API = {'昌平新校区': 'toyy', '燕园校区': 'tocp'};
+const ID_BLACKLIST = new Set([
+    13, // 新校区→200号校区
+    14, // 200号校区→新校区
+]);
 
 export let STATUS_DESC = {
     0: '已过期',
@@ -208,7 +212,10 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
         return cell;
     }
 
-    for(let track of d_shuttles)
+    for(let track of d_shuttles) {
+        if(ID_BLACKLIST.has(track.id))
+            continue;
+
         for(let cal of Object.values(track.table))
             for(let point of cal)
                 if(to_int(point.row.total)>0) {
@@ -240,6 +247,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
                         }
                     }
                 }
+    }
 
     // finalize cell group
 
