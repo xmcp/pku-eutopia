@@ -3,6 +3,7 @@ from pathlib import Path
 import shutil
 import datetime
 import gzip
+import brotli # pip install brotli
 
 #HOST_URL = 'http://127.0.0.1/'
 HOST_URL = 'https://xmcp.ltd/pku-eutopia/'
@@ -24,6 +25,17 @@ def wrap_js(s):
     # wrap js code in iife to avoid polluting global namespace
     return '(()=>{%s})()'%s
 
+def save_with_compression(p, content):
+    content_b = content.encode('utf-8')
+    with open(p, 'wb') as f:
+        f.write(content_b)
+    with gzip.open(p.with_name(p.name+'.gz'), 'wb') as f:
+        f.write(content_b)
+    with open(p.with_name(p.name+'.br'), 'wb') as f:
+        f.write(brotli.compress(content_b))
+    shutil.copystat(p, p.with_name(p.name+'.gz'))
+    shutil.copystat(p, p.with_name(p.name+'.br'))
+
 js = []
 css = []
 
@@ -42,17 +54,8 @@ with open('userscript/template.js') as f:
 js = wrap_js(add_build_info('\n'.join(js)))
 css = '\n'.join(css)
 
-with open(OUTPUT_DIR / f'{BASENAME}.min.js', 'w', encoding='utf-8') as f:
-    f.write(js)
-with gzip.open(OUTPUT_DIR / f'{BASENAME}.min.js.gz', 'wb') as f:
-    f.write(js.encode('utf-8'))
-shutil.copystat(OUTPUT_DIR / f'{BASENAME}.min.js', OUTPUT_DIR / f'{BASENAME}.min.js.gz')
-
-with open(OUTPUT_DIR / f'{BASENAME}.min.css', 'w', encoding='utf-8') as f:
-    f.write(css)
-with gzip.open(OUTPUT_DIR / f'{BASENAME}.min.css.gz', 'wb') as f:
-    f.write(css.encode('utf-8'))
-shutil.copystat(OUTPUT_DIR / f'{BASENAME}.min.css', OUTPUT_DIR / f'{BASENAME}.min.css.gz')
+save_with_compression(OUTPUT_DIR / f'{BASENAME}.min.js', js)
+save_with_compression(OUTPUT_DIR / f'{BASENAME}.min.css', css)
 
 content = (
     content
