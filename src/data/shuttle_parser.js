@@ -5,11 +5,15 @@ import {ConfigCtx} from './config_ctx';
 import {normalize_track_name, reservation_info} from './common';
 
 const DIR_INDEX = {'toyy': 0, 'tocp': 1};
-const DIR_KEYS_FROM_API = {'昌平新校区': 'toyy', '燕园校区': 'tocp'};
-const ID_BLACKLIST = new Set([
-    13, // 新校区→200号校区
-    14, // 200号校区→新校区
-]);
+
+function guess_direction(s) {
+    let campus_list = s.split('→');
+    let id_yy = campus_list.indexOf('燕园校区');
+    let id_cp = campus_list.indexOf('新校区');
+    if(id_yy===-1 || id_cp===-1)
+        return null;
+    return id_yy<id_cp ? 'tocp' : 'toyy';
+}
 
 export let STATUS_DESC = {
     0: '已过期',
@@ -213,9 +217,6 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
     }
 
     for(let track of d_shuttles) {
-        if(ID_BLACKLIST.has(track.id))
-            continue;
-
         for(let cal of Object.values(track.table))
             for(let point of cal)
                 if(to_int(point.row.total)>0) {
@@ -237,7 +238,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
                         time_text: point.yaxis,
                     };
 
-                    let dkey = DIR_KEYS_FROM_API[track.json_address.campus_name];
+                    let dkey = guess_direction(track.name);
                     if(dkey) {
                         let c = get_cell(point.date, point.yaxis, dkey);
                         // it is possible that c===null if track date is out of display range
