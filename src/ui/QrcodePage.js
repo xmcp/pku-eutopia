@@ -10,6 +10,7 @@ import {revoke} from '../api/action';
 import {DataCtx} from '../data/data_ctx';
 
 import './QrcodePage.css';
+import hdr_trigger from './hdr_trigger.webm?inline';
 
 const QR = makeAsyncComponent({ createElement, ...hooks }, generate);
 
@@ -58,7 +59,8 @@ function QrcodeWidget({load_fn, text_processing, navigate}) {
         <div className="eu-qrcode-widget-frame">
             {text_processing(res)}
             <div className="eu-qrcode-img">
-                <QR content={res.code} />
+                <video src={hdr_trigger} className="eu-qrcode-hdr"></video>
+                <QR content={res.code}/>
             </div>
             <p>
                 <button onClick={()=>{

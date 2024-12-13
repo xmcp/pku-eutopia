@@ -30,9 +30,15 @@
 
 .eu-qrcode-img {
     background-color: white;
+    background-color: color(srgb 400% 400% 400%);
     width: 300px;
     margin: 2em auto;
     box-sizing: content-box;
+}
+
+.eu-qrcode-hdr {
+    position: absolute;
+    height: 1px;
 }
 
 .eu-qrcode-img canvas {
