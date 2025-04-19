@@ -34,6 +34,8 @@ export async function reserve(track_id, date_str, time_id) {
         throw new Error(`${data.e}: ${data.m}`);
 
     //window.alert(data.m);
+
+    window._eu_signin_popped = false; // may trigger signin popup
 }
 
 export async function revoke(res_id) {
