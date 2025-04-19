@@ -9,7 +9,7 @@ const DIR_INDEX = {'toyy': 0, 'tocp': 1};
 function guess_direction(s) {
     let campus_list = s.split('→');
     let id_yy = campus_list.indexOf('燕园校区');
-    let id_cp = campus_list.indexOf('新校区');
+    let id_cp = campus_list.indexOf('新燕园校区');
     if(id_yy===-1 || id_cp===-1)
         return null;
     return id_yy<id_cp ? 'tocp' : 'toyy';
