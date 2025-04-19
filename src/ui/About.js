@@ -73,7 +73,7 @@ function Preference() {
                 <b>在班车时刻中显示昨天</b>
             </label>
         </p>
-        <p><b>
+        <p>
             <label>
                 <input type="checkbox" checked={config.auto_popup==='on'} onChange={(e)=>update_config({
                     ...config,
@@ -81,7 +81,7 @@ function Preference() {
                 })} />
                 <b>插件载入后立即弹出签到界面或班车时刻</b>
             </label>
-        </b></p>
+        </p>
     </>);
 }
 
