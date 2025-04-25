@@ -87,19 +87,18 @@ function Router() {
 
     useEffect(()=>{
         if(window._eu_signin_popped) return;
-        if(reservation_data) {
-            window._eu_signin_popped = true;
-            if(config.auto_popup) {
-                let target = null;
-                for(let r of reservation_data.pending) {
-                    if(r.status==='pending_signable') {
-                        if(target) // ignore auto signin if multiple targets
-                            return;
-                        target = r;
-                    }
+        if(reservation_data && config.auto_popup) {
+            let target = null;
+            for(let r of reservation_data.pending) {
+                if(r.status==='pending_signable') {
+                    if(target) // ignore auto signin if multiple targets
+                        return;
+                    target = r;
                 }
-                if(target)
-                    navigate('qrcode', {type: 'reservation', reservation: target});
+            }
+            if(target) {
+                window._eu_signin_popped = true;
+                navigate('qrcode', {type: 'reservation', reservation: target});
             }
         }
     }, [config.auto_popup, reservation_data, navigate]);
