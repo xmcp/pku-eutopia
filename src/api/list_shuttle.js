@@ -13,7 +13,8 @@ function to_monday(d, week_delta) {
 }
 
 export async function get_list_shuttle(week_delta) {
-    let monday = to_monday(new Date(), week_delta);
+    let today = new Date();
+    let monday = to_monday(new Date(today - 86400*1000), week_delta); // ensure yesterday present in result
 
     let res = null;
     if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
