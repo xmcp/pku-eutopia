@@ -68,7 +68,8 @@
 }
 
 .eu-table-body>:first-child {
-    background-color: #ececec;
+    background-color: rgba(236, 236, 236, .6);
+    pointer-events: none;
 }
 
 .eu-table-body>:first-child {
