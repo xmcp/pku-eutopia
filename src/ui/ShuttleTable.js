@@ -69,7 +69,13 @@ function CellGroupedRow({cells, cols, y_offset, open_detail, cur_detail}) {
 }
 
 export function ShuttleTable({data, navigate}) {
-    let [detail, set_detail] = useState(null);
+    let [detail, set_detail] = useState(data.nearby_cell);
+
+    useState(()=>{
+        // update detail page if nearby cell changes due to registration data
+        if(data.nearby_cell && detail && data.nearby_cell!==detail && data.nearby_cell.key===detail.key)
+            set_detail(data.nearby_cell);
+    }, [data.nearby_cell, detail]);
 
     let canvas_height = data.yaxis.max_offset + PILL_HEIGHT;
 

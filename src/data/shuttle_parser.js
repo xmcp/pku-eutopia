@@ -74,14 +74,23 @@ function DescribeDirectionLong({dir}) {
 
 const PX_PER_MINUTE = .75;
 
-export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
+export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config_location) {
     let res= {
         series: [],
         yaxis: {
             max_offset: null,
             ticks: [],
         },
+        nearby_cell: null,
     };
+
+    let cur_date = new Date();
+    let cur_hour = cur_date.getHours();
+    let cur_int = cur_hour * 60 + cur_date.getMinutes();
+
+    let nearby_prio_dkey = (
+        (config_location==='yy' ^ (cur_date.getHours() >= 14)) ? 'tocp' : 'toyy'
+    );
 
     // collect shuttle times
 
@@ -110,13 +119,14 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
 
     let dates = filter_dates(dates_set, show_yesterday).sort((a, b) => date_key(a)-date_key(b));
 
+    let today_datestr = null;
     let date_str_to_series = {};
 
     dates.forEach(d => {
         let date = new Date(d);
 
-        let is_today = date.toDateString() === (new Date()).toDateString();
-        let is_yesterday = date.toDateString() === (new Date((+new Date()) - 86400*1000)).toDateString();
+        let is_today = date.toDateString() === cur_date.toDateString();
+        let is_yesterday = date.toDateString() === (new Date(+cur_date - 86400*1000)).toDateString();
         let weekday_desc = '周' + '日一二三四五六日'[date.getDay()];
 
         let series = {
@@ -138,11 +148,12 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
 
         res.series.push(series);
         date_str_to_series[d] = series;
+
+        if(is_today)
+            today_datestr = d;
     });
 
     res.yaxis.max_offset = PX_PER_MINUTE * (time_max - time_min);
-
-    let cur_hour = new Date().getHours();
 
     for(let i=time_min; i<=time_max; i+=60) {
         let h = Math.round(i/60);
@@ -182,9 +193,11 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
                 break;
             }
 
+        let time_int = hhmm_to_int(time_str);
+
         if(!row) { // time does not exist, create new row
             row = {
-                y_offset: PX_PER_MINUTE * (hhmm_to_int(time_str) - time_min),
+                y_offset: PX_PER_MINUTE * (time_int - time_min),
                 time: time_str,
                 cells: [],
             };
@@ -199,6 +212,8 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
 
         let cell = {
             index: DIR_INDEX[dir],
+            key: `${date_str} ${time_str} ${dir}`,
+
             title_long: <>
                 {series.date}{' '}{time_str}{' '}
                 <DescribeDirectionLong dir={dir} />
@@ -213,6 +228,11 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday) {
             tracks: [],
         };
         row.cells.push(cell);
+
+        if(date_str===today_datestr && (time_int-cur_int) > 0 && (time_int-cur_int) < 25) // time is nearby
+            if(res.nearby_cell===null || dir===nearby_prio_dkey) // we get priority
+                res.nearby_cell = cell;
+
         return cell;
     }
 

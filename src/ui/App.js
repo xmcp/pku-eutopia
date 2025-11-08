@@ -55,6 +55,7 @@ function Router() {
                 data.shuttle_thisweek.concat(with_fallback(data.shuttle_nextweek)),
                 with_fallback(data.reservation),
                 config.show_yesterday==='on',
+                config.location,
             ) :
             null
     , [data.shuttle_thisweek, data.shuttle_nextweek, data.reservation, config.show_yesterday]);
