@@ -1,11 +1,13 @@
 import {handle_redirect, mock} from './common';
 
+const RETRIEVE_SIZE = 30;
+
 async function get_list_reservation_per_status(status) {
     try {
         let res = await fetch((
             '/site/reservation/my-list-time'
             +'?p=1'
-            +'&page_size=50'
+            +'&page_size='+RETRIEVE_SIZE
             +'&status='+status
             +'&sort_time=true'
             +'&sort=desc'
@@ -45,7 +47,7 @@ export async function get_list_reservation() {
         res = await fetch((
             '/site/reservation/my-list-time'
             +'?p=1'
-            +'&page_size=50'
+            +'&page_size='+RETRIEVE_SIZE
             +'&status=0'
             +'&sort_time=true'
             +'&sort=desc'
