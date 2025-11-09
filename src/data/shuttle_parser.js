@@ -111,7 +111,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config
                 }
 
     // add a slight margin
-    time_min = Math.max(0, time_min-60);
+    time_min = Math.max(0, time_min-120);
     time_max = Math.min(24*60, time_max+30);
 
     time_min = Math.floor(time_min/60)*60; // floor to hour

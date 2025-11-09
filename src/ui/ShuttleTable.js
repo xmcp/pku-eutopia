@@ -1,4 +1,4 @@
-import {useState, useContext} from 'react';
+import {useState, useContext, useEffect, useRef} from 'react';
 
 import {ConfigCtx} from '../data/config_ctx';
 import {ShuttleDetail} from './ShuttleDetail';
@@ -70,12 +70,18 @@ function CellGroupedRow({cells, cols, y_offset, open_detail, cur_detail}) {
 
 export function ShuttleTable({data, navigate}) {
     let [detail, set_detail] = useState(data.nearby_cell);
+    let hl_elem = useRef(null);
 
     useState(()=>{
         // update detail page if nearby cell changes due to registration data
         if(data.nearby_cell && detail && data.nearby_cell!==detail && data.nearby_cell.key===detail.key)
             set_detail(data.nearby_cell);
     }, [data.nearby_cell, detail]);
+
+    useEffect(()=>{
+        if(hl_elem.current)
+            hl_elem.current.scrollIntoView({behavior: 'instant', block: 'center'});
+    }, []);
 
     let canvas_height = data.yaxis.max_offset + PILL_HEIGHT;
 
@@ -104,12 +110,17 @@ export function ShuttleTable({data, navigate}) {
                         {data.yaxis.ticks.map(t =>
                             <div
                                 key={t.offset}
-                                className={'eu-table-timecell eu-table-timecell-label eu-table-canvas-item' + (t.highlight ? ' eu-table-highlighted' : '')}
                                 style={{
                                     height: PILL_HEIGHT + "px",
                                     lineHeight: PILL_HEIGHT + "px",
                                     top: t.offset + "px"
                                 }}
+                                {...(t.highlight ? {
+                                    className: 'eu-table-timecell eu-table-timecell-label eu-table-canvas-item eu-table-highlighted',
+                                    ref: hl_elem,
+                                } : {
+                                    className: 'eu-table-timecell eu-table-timecell-label eu-table-canvas-item',
+                                })}
                             >
                                 {t.name}
                             </div>
