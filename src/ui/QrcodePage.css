@@ -1,6 +1,5 @@
 .eu-qrcode-widget-frame {
     text-align: center;
-    padding: 2em 0;
 }
 
 .eu-qrcode-table {
@@ -11,6 +10,7 @@
 
 .eu-paper-pku {
     background-color: #f2f2f2 !important;
+    overflow-y: hidden !important; /* qrcode cannot scroll anyway */
 }
 
 .eu-title-pku {
@@ -29,10 +29,10 @@
 }
 
 .eu-qrcode-img {
-    background-color: white;
-    background-color: color(srgb 400% 400% 400%);
-    width: 300px;
-    margin: 2em auto;
+    width: 330px;
+    height: 330px;
+    margin: 1.5em auto;
+    dynamic-range-limit: no-limit;
     box-sizing: content-box;
 }
 
@@ -41,8 +41,18 @@
     height: 1px;
 }
 
+.eu-qrcode-bg {
+    position: absolute;
+    display: block;
+    height: 330px;
+    width: 330px;
+}
+
 .eu-qrcode-img canvas {
-    width: 100%;
+    position: absolute;
+    display: block;
+    width: 330px;
+    height: 330px;
 }
 
 .eu-qrcode-widget-frame button {
