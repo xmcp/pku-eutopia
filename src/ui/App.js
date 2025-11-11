@@ -8,7 +8,7 @@ import {parse_reservation, got_res_id} from '../data/reservation_parser';
 import {ConfigProvider, ConfigCtx} from '../data/config_ctx';
 import {eu_sys_version} from '../utils';
 import {About} from './About';
-import {QrcodePage} from './QrcodePage';
+import {QrcodePage, HdrUserActionEater} from './QrcodePage';
 
 import './App.css';
 
@@ -170,6 +170,7 @@ export function App() {
     return (
         <ConfigProvider>
             <DataProvider>
+                <HdrUserActionEater />
                 <Router />
             </DataProvider>
         </ConfigProvider>

@@ -17,6 +17,32 @@ const QR = makeAsyncComponent({ createElement, ...hooks }, generate, {
     padY: 6,
 });
 
+export function HdrUserActionEater() {
+    // xxx: ios 26 requires user action to enable hdr image
+
+    let [eaten, set_eaten] = useState(false);
+
+    useEffect(() => {
+        function on_user_action() {
+            set_eaten(true);
+        }
+        if(!eaten) {
+            window.addEventListener('touchstart', on_user_action, {passive: true});
+            window.addEventListener('click', on_user_action, {passive: true});
+
+            return () => {
+                window.removeEventListener('touchstart', on_user_action);
+                window.removeEventListener('click', on_user_action);
+            };
+        }
+    }, [eaten]);
+
+    if(eaten)
+        return null;
+    else
+        return <img src={hdr_bg} className="eu-hdr-eater" />;
+}
+
 function QrcodeWidget({load_fn, text_processing, navigate}) {
     let [status, set_status] = useState('loading');
     let [res, set_res] = useState(null);

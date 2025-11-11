@@ -1,3 +1,12 @@
+.eu-hdr-eater {
+    position: fixed;
+    right: 1px;
+    bottom: 1px;
+    z-index: 60000;
+    height: 1px;
+    opacity: .1;
+}
+
 .eu-qrcode-widget-frame {
     text-align: center;
 }
