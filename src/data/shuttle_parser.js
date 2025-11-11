@@ -85,6 +85,10 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config
     };
 
     let cur_date = new Date();
+    if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
+        cur_date = new Date(window.EUTOPIA_MOCK_DATE);
+    }
+
     let cur_hour = cur_date.getHours();
     let cur_int = cur_hour * 60 + cur_date.getMinutes();
 
