@@ -72,7 +72,7 @@ export function ShuttleTable({data, navigate}) {
     let [detail, set_detail] = useState(data.nearby_cell);
     let hl_elem = useRef(null);
 
-    useState(()=>{
+    useEffect(()=>{
         // update detail page if nearby cell changes due to registration data
         if(data.nearby_cell && detail && data.nearby_cell!==detail && data.nearby_cell.key===detail.key)
             set_detail(data.nearby_cell);
