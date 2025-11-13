@@ -72,7 +72,6 @@ function DescribeDirectionLong({dir}) {
     )[dir] || `((${dir}))`;
 }
 
-const PX_PER_MINUTE = .75;
 export function is_time_nearby_for_signin(time_int, cur_int=null) {
     if(cur_int===null) {
         let cur_date = new Date();
@@ -82,10 +81,10 @@ export function is_time_nearby_for_signin(time_int, cur_int=null) {
         cur_int = cur_date.getHours() * 60 + cur_date.getMinutes();
     }
     let time_delta = time_int - cur_int;
-    console.log('!!! check', time_int, cur_int, time_delta);
     return time_delta > 0 && time_delta <= 25;
 }
 
+const PX_PER_MINUTE = .8;
 
 export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config_location) {
     let res= {

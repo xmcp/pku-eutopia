@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         Eutopia
 // @namespace    http://xmcp.ltd/
-// @version      0.4
+// @version      0.5
 // @description  Top of the top. Top of the world.
 // @author       xmcp
 // @match        https://process.pku.edu.cn/v2/site/index*
@@ -10,7 +10,7 @@
 // @match        https://process-443.w.pku.edu.cn/v2/site/m_index*
 // @match        https://wproc.pku.edu.cn/*
 // @grant        none
-// @run-at       document-body
+// @run-at       document-start
 // ==/UserScript==
 
 const USERSCRIPT_COMPAT_VER = 'compat.v2';
@@ -38,7 +38,7 @@ const USERSCRIPT_COMPAT_VER = 'compat.v2';
     container.style.fontSize = '14px';
     container.style.lineHeight = 'initial';
     container.style.color = 'black';
-    document.body.appendChild(container);
+    document.documentElement.appendChild(container);
 
     let shadow = container.attachShadow({mode: 'open'});
 
@@ -49,13 +49,16 @@ const USERSCRIPT_COMPAT_VER = 'compat.v2';
     STYLES.forEach(u => {
         let elem = document.createElement('link');
         elem.rel = 'stylesheet';
+        elem.fetchpriority = 'high';
         elem.href = u; // + '?t=' + (+new Date());
         shadow.appendChild(elem);
     });
 
     SCRIPTS.forEach(u => {
         let elem = document.createElement('script');
+        elem.async = true;
+        elem.fetchpriority = 'high';
         elem.src = u; // + '?t=' + (+new Date());
-        document.head.appendChild(elem);
+        document.documentElement.appendChild(elem);
     });
 })();

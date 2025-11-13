@@ -1,9 +1,10 @@
 import {render, Component} from 'preact';
 
 import {App} from './ui/App';
+import {check_session_on_launch} from './api/common';
+import {BUILD_INFO} from './utils';
 
 import './index.css';
-import {BUILD_INFO} from './utils';
 
 class ErrorBoundary extends Component {
     constructor(props) {
@@ -47,6 +48,8 @@ function inject() {
         console.log('entupia: render root not empty');
         return;
     }
+
+    check_session_on_launch();
 
     render((
       <ErrorBoundary>

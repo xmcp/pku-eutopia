@@ -27,9 +27,14 @@
     height: calc(100% - 3em);
 }
 
+.eu-title::before {
+    content: '§ ';
+    opacity: .5;
+}
+
 .eu-title {
     margin: 0;
-    padding: .4em .2em;
+    padding: .5em .1em;
     font-size: 1.5em;
 }
 

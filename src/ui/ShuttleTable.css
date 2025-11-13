@@ -6,7 +6,7 @@
     max-width: 100%;
     overflow-x: auto;
     overscroll-behavior: contain;
-    background-color: #ececec;
+    background-color: #eee;
 }
 
 .eu-table-header,
@@ -28,11 +28,11 @@
     line-height: 2em;
     font-weight: bold;
     z-index: 40002;
-    background-color: #f4f4f4;
+    background-color: #f7f7f7;
 }
 
 .eu-table-highlighted {
-    background-color: #ffffbb !important;
+    background-color: #ffffaa !important;
 }
 
 .eu-table-series-addon-left {
@@ -56,23 +56,15 @@
 }
 
 .eu-table-timecell {
-    width: 50px;
+    width: 45px;
     text-align: center;
     font-weight: bold;
-}
-
-.eu-table-timecell-label::after {
-    content: " >";
-    color: #ccc;
-
 }
 
 .eu-table-body>:first-child {
     background-color: rgba(236, 236, 236, .6);
     pointer-events: none;
-}
-
-.eu-table-body>:first-child {
+    backdrop-filter: blur(1px) contrast(30%) brightness(150%) saturate(50%);
     position: sticky;
     left: 0;
     z-index: 40001;
@@ -91,7 +83,7 @@
 }
 
 .eu-table-body .eu-table-series:hover {
-    background-color: #f4f4f4;
+    background-color: #f7f7f7;
 }
 
 .eu-table-body .eu-pill-itemtitle {
