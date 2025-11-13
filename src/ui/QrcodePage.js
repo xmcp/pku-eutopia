@@ -10,7 +10,7 @@ import {revoke} from '../api/action';
 import {DataCtx} from '../data/data_ctx';
 
 import './QrcodePage.css';
-import hdr_bg from './hdr_bg.png?inline';
+import hdr_bg from './hdr_trigger.webm?inline';
 
 const QR = makeAsyncComponent({ createElement, ...hooks }, generate, {
     padX: 6,
@@ -40,13 +40,14 @@ export function HdrUserActionEater() {
     if(eaten)
         return null;
     else
-        return <img src={hdr_bg} className="eu-hdr-eater" />;
+        return <video src={hdr_bg} className="eu-hdr-eater" />;
 }
 
 function QrcodeWidget({load_fn, text_processing, navigate}) {
     let [status, set_status] = useState('loading');
     let [res, set_res] = useState(null);
     let data = useContext(DataCtx);
+    let [hdr_key, set_hdr_key] = useState(0);
 
     async function load() {
         set_status('loading');
@@ -64,6 +65,18 @@ function QrcodeWidget({load_fn, text_processing, navigate}) {
 
     useEffect(()=>{
         load();
+
+        // xxx: safari requires user action to show video in hdr
+        function listener() {
+            set_hdr_key(1);
+        }
+        document.body.addEventListener('touchstart', listener, {passive: true});
+        document.body.addEventListener('click', listener, {passive: true});
+
+        return ()=>{
+            document.body.removeEventListener('touchstart', listener);
+            document.body.removeEventListener('click', listener);
+        };
     //eslint-disable-next-line
     }, []);
 
@@ -88,7 +101,7 @@ function QrcodeWidget({load_fn, text_processing, navigate}) {
         <div className="eu-qrcode-widget-frame">
             {text_processing(res)}
             <div className="eu-qrcode-img">
-                <img src={hdr_bg} className="eu-qrcode-bg" />
+                <video key={hdr_key} src={hdr_bg} className="eu-qrcode-bg" />
                 <QR content={res.code} />
             </div>
             <p>
