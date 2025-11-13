@@ -10,7 +10,7 @@ export async function get_res_qrcode(reservation) {
             '/site/reservation/get-sign-qrcode'
             +'?type=0'
             +`&id=${reservation.res_id}`
-            +`&hall_appointment_data_id=${reservation.appointment_id}`
+            +(reservation.appointment_id ? `&hall_appointment_data_id=${reservation.appointment_id}` : '')
         ), {
             redirect: 'manual',
         });

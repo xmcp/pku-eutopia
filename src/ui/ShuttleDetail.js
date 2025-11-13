@@ -1,11 +1,12 @@
 import {useContext, useState} from 'react';
 
-import {STATUS_MAGIC_NUMBER, STATUS_DESC} from '../data/shuttle_parser';
+import {STATUS_MAGIC_NUMBER, STATUS_DESC, is_time_nearby_for_signin} from '../data/shuttle_parser';
 import {reserve, revoke} from '../api/action';
 import {ConfigCtx} from '../data/config_ctx';
 import {DataCtx} from '../data/data_ctx';
 
 import './ShuttleDetail.css';
+import {hhmm_to_int} from '../utils';
 
 export function ShuttleDetail({cell, close, navigate}) {
     let data = useContext(DataCtx);
@@ -32,7 +33,11 @@ export function ShuttleDetail({cell, close, navigate}) {
             navigate('qrcode', {type: 'temp', track_id: track.track_id, time_text: track.time_text});
         }
 
-        let action_cmd = action_do_fn('预约', ()=>reserve(track.track_id, track.date, track.time_id));
+        let action_cmd = action_do_fn('预约', async ()=>{
+            let res = await reserve(track.track_id, track.date, track.time_id);
+            if(is_time_nearby_for_signin(hhmm_to_int(cell.time_str)))
+                navigate('qrcode', {type: 'reservation', reservation: {res_id: res.res_id}});
+        });
         let action_semantic = 'default';
         let action_text = '预约';
 

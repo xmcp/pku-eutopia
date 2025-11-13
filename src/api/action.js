@@ -2,30 +2,30 @@ import {sleep} from '../utils';
 import {handle_redirect, mock} from './common';
 
 export async function reserve(track_id, date_str, time_id) {
+    let res = null;
     if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
-        alert(`mocked reserve: ${track_id}, ${date_str}, ${time_id}`);
-        await mock(null);
-        return;
+        res = await mock('/mock/reserve.json');
     }
-
-    let res = await fetch('/site/reservation/launch', {
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-        },
-        body: new URLSearchParams({
-            resource_id: track_id,
-            code: '',
-            remarks: '',
-            deduct_num: '',
-            data: JSON.stringify([{
-                date: date_str,
-                period: time_id,
-                sub_resource_id: 0,
-            }]),
-        }),
-        redirect: 'manual',
-    });
+    if(res===null) {
+        res = await fetch('/site/reservation/launch', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/x-www-form-urlencoded',
+            },
+            body: new URLSearchParams({
+                resource_id: track_id,
+                code: '',
+                remarks: '',
+                deduct_num: '',
+                data: JSON.stringify([{
+                    date: date_str,
+                    period: time_id,
+                    sub_resource_id: 0,
+                }]),
+            }),
+            redirect: 'manual',
+        });
+    }
 
     handle_redirect(res);
 
@@ -35,7 +35,11 @@ export async function reserve(track_id, date_str, time_id) {
 
     //window.alert(data.m);
 
-    window._eu_signin_popped = false; // may trigger signin popup
+    // signin popup is now handled by the reserve function
+    // therefore we disable the check in table ui to avoid popping up twice
+    window._eu_signin_popped = true;
+
+    return data.d;
 }
 
 export async function revoke(res_id) {

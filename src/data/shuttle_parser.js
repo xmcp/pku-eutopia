@@ -73,6 +73,19 @@ function DescribeDirectionLong({dir}) {
 }
 
 const PX_PER_MINUTE = .75;
+export function is_time_nearby_for_signin(time_int, cur_int=null) {
+    if(cur_int===null) {
+        let cur_date = new Date();
+        if(process.env.NODE_ENV!=='production' && window.EUTOPIA_USE_MOCK) {
+            cur_date = new Date(window.EUTOPIA_MOCK_DATE);
+        }
+        cur_int = cur_date.getHours() * 60 + cur_date.getMinutes();
+    }
+    let time_delta = time_int - cur_int;
+    console.log('!!! check', time_int, cur_int, time_delta);
+    return time_delta > 0 && time_delta <= 25;
+}
+
 
 export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config_location) {
     let res= {
@@ -216,6 +229,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config
 
         let cell = {
             index: DIR_INDEX[dir],
+            time_str: time_str,
             key: `${date_str} ${time_str} ${dir}`,
 
             title_long: <>
@@ -233,7 +247,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config
         };
         row.cells.push(cell);
 
-        if(date_str===today_datestr && (time_int-cur_int) > 0 && (time_int-cur_int) < 25) // time is nearby
+        if(date_str===today_datestr && is_time_nearby_for_signin(time_int, cur_int)) // time is nearby
             if(res.nearby_cell===null || dir===nearby_prio_dkey) // we get priority
                 res.nearby_cell = cell;
 
