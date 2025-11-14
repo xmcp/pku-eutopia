@@ -2,47 +2,53 @@
 
 **班车预约 for Humans™**
 
-班车预约系统重制版：快速约车，*\<del>壹\</del>* **零**键签到，一目了然，触手可及
+班车预约系统增强脚本：一键约车，零键签到，一目了然，触手可及
 
 
 
-## 二维码签到更新说明（2024.3.17）
-
-最近启用了二维码签到功能，本插件现已适配。目前的签到逻辑如下：
-
-- 在 “预约记录” 页面，从发车时刻前 30 分钟开始将展示签到按钮（蓝色背景），点击即可展示签到二维码。
-- 在 “班车时刻” 页面，对于无法预约的班次（例如 “已过期”，按钮显示为灰色背景），点击即可展示临时登记码；对于可以预约的班次，将展示预约按钮，预约后将展示签到按钮，点击即可展示签到二维码。
-- 进入网页时，如果有恰好一个可以签到的预约，将直接弹出签到二维码。<del>一键签到正式升级为零键签到。</del>在偏好设置里可以关闭此行为。
-
-另外本次更新将框架从 React 切换到了 Preact，使包体大小从 65KB 降低至 21KB。如果你遇到了旧设备的兼容性问题，可能是 Preact 导致的，请在 GitHub 提交 issue。
+![screenshot](media/screenshot.webp)
 
 
 
-![screenshot](media/screenshot.png)
+## 功能特色
+
+- 用**人类可读**的方式呈现班车时刻和预约记录
+- 时间临近班车时（发车前 1~25 分钟）**自动展示详情**，可一键预约并展示二维码
+- 时间临近已预约的班车时**自动展示二维码**
+- 显示**超亮的二维码**，方便扫描（需要设备支持 HDR，比如 iPhone）
+- 弱网环境**超快加载**，脚本仅 20KB，绕过原系统繁杂且低效的网络请求，且支持自动重试
 
 
 
-## 通过用户脚本管理器安装（推荐）
+## 安装方法
 
-首先安装一个用户脚本管理器：
+### PC / Mac 用户
 
-- 电脑端 Chrome / Edge / Firefox 用户推荐使用 [Tampermonkey](https://www.tampermonkey.net/)。
-- iOS / macOS Safari 用户推荐使用 [Userscripts](https://apps.apple.com/cn/app/userscripts/id1463298887)，请参阅 [该项目的 README](https://github.com/quoid/userscripts#usage)。
-- Android 用户推荐安装 Firefox 浏览器然后使用 [Tampermonkey](https://addons.mozilla.org/en-US/android/addon/tampermonkey/)，你也可以使用其他支持插件或者用户脚本的浏览器（例如 Via、Kiwi、Yandex Browser）。
+首先在你的浏览器上安装 Tampermonkey（链接：[Chrome](https://chromewebstore.google.com/detail/tampermonkey/dhdgffkkebhmkfjojejmpbldmpobfkfo) / [Edge](https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd) / [Firefox](https://addons.mozilla.org/zh-CN/firefox/addon/tampermonkey/)）。
 
-然后将 [https://xmcp.ltd/pku-eutopia/eutopia.user.js](https://xmcp.ltd/pku-eutopia/eutopia.user.js) 添加到用户脚本管理器中，即安装完成。
+然后点击链接 [xmcp.ltd/pku-eutopia/eutopia.user.js](https://xmcp.ltd/pku-eutopia/eutopia.user.js)，将此脚本添加到 Tampermonkey 中。
 
-安装完成后每次访问办事大厅主页，页面底部将自动出现相关功能的按钮。iOS / macOS 用户首次使用时可能需要在地址栏左侧的菜单中授权 Userscripts 访问相关域名。
+### iOS 用户
 
-建议将网址 https://wproc.pku.edu.cn/v2/site/index 添加到浏览器收藏，访问此链接即可直接激活班车预约插件。
+首先使用 Safari 浏览器，**长按**链接 [xmcp.ltd/pku-eutopia/eutopia.user.js](https://xmcp.ltd/pku-eutopia/eutopia.user.js)，在弹出的菜单中选择 “下载链接文件”。
+
+接下来在 AppStore 安装 [Userscripts](https://apps.apple.com/cn/app/userscripts/id1463298887)。进入应用后点击 “Change Userscripts Directory”，定位到下载文件所在的目录（默认是 “我的 iPhone” > “下载”，如果你愿意也可以把它移动到一个单独的目录）。
+
+然后回到 Safari，访问班车预约系统 [wproc.pku.edu.cn](https://wproc.pku.edu.cn/)。点击地址栏旁边的插件图标，进入 “管理扩展” 菜单，启用 Userscripts 并授权访问当前域名。
+
+### Android 用户
+
+首先使用一个支持用户脚本功能的浏览器，例如 Edge（安装 [Tampermonkey](https://microsoftedge.microsoft.com/addons/detail/%E7%AF%A1%E6%94%B9%E7%8C%B4/iikmkjmpaadaobahmlepeloendndfphd)）和 Firefox（安装 [Tampermonkey](https://addons.mozilla.org/zh-CN/firefox/addon/tampermonkey/)）。
+
+安装完成后，点击链接 [xmcp.ltd/pku-eutopia/eutopia.user.js](https://xmcp.ltd/pku-eutopia/eutopia.user.js)，将此脚本添加到 Tampermonkey 中。
 
 
 
-## 通过 Bookmarklet 安装
+## 使用方法
 
-右键 / 长按 / 拖拽此链接 →【[班车预约](javascript:el=document.createElement('script');el.charset='utf-8';el.src='https://xmcp.ltd/pku-eutopia/eutopia.user.js';void document.head.appendChild(el))】 ，将它添加到浏览器书签。
+安装完成后，每次访问班车预约系统主页，Eutopia 将自动置顶显示。点击页面底部的按钮可以切换页面或者隐藏 Eutopia 界面。
 
-此后在办事大厅域名打开书签，即出现相关功能的按钮。请注意你需要先登录到办事大厅再点击书签。
+建议将班车预约系统网址 [wproc.pku.edu.cn/v2/site/index](https://wproc.pku.edu.cn/v2/site/index) 添加到浏览器书签或者主屏幕，并在浏览器中记住 IAAA 登录密码，以方便后续使用。
 
 
 
