@@ -228,6 +228,7 @@ export function parse_shuttle(d_shuttles, d_reservations, show_yesterday, config
 
         let cell = {
             index: DIR_INDEX[dir],
+            date_str: date_str,
             time_str: time_str,
             key: `${date_str} ${time_str} ${dir}`,
 

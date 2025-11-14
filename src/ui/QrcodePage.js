@@ -68,15 +68,20 @@ function QrcodeWidget({load_fn, text_processing, navigate}) {
 
         // xxx: safari requires user action to show video in hdr
         function listener() {
-            set_hdr_key(1);
+            setTimeout(()=>{
+                set_hdr_key(1);
+            }, 0);
+            cleanup();
         }
-        document.body.addEventListener('touchstart', listener, {passive: true});
-        document.body.addEventListener('click', listener, {passive: true});
+        function cleanup() {
+            document.documentElement.removeEventListener('touchstart', listener);
+            document.documentElement.removeEventListener('click', listener);
+        }
 
-        return ()=>{
-            document.body.removeEventListener('touchstart', listener);
-            document.body.removeEventListener('click', listener);
-        };
+        document.documentElement.addEventListener('touchstart', listener, {passive: true});
+        document.documentElement.addEventListener('click', listener, {passive: true});
+
+        return cleanup;
     //eslint-disable-next-line
     }, []);
 
