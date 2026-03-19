@@ -1,3 +1,7 @@
+# /// script
+# dependencies = ["brotli"]
+# ///
+
 import json
 from pathlib import Path
 import shutil
