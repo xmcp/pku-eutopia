@@ -27,7 +27,7 @@ function reservation_status(r) {
         return 'revoked';
     else if(r.status_name==='已签到')
         return 'finished';
-    else if(r.status_name==='已预约') {
+    else if(r.status_name==='已预约' || r.status_name==='未签到') {
         let cur_time = +new Date();
         let d = period_text_to_date(parse_period_text(r.periodList));
         let sign_time = d ? (+d) : 0;
