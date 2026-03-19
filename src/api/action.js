@@ -30,8 +30,11 @@ export async function reserve(track_id, date_str, time_id) {
     handle_redirect(res);
 
     let data = await res.json();
-    if(data.e!==0)
+    if(data.e!==0) {
+        if(data.m==='同一时间段不可重复预约')
+            return;
         throw new Error(`${data.e}: ${data.m}`);
+    }
 
     //window.alert(data.m);
 

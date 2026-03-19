@@ -35,7 +35,7 @@ export function ShuttleDetail({cell, close, navigate}) {
 
         let action_cmd = action_do_fn('预约', async ()=>{
             let res = await reserve(track.track_id, track.date, track.time_id);
-            if(is_time_nearby_for_signin(hhmm_to_int(cell.time_str)))
+            if(res && is_time_nearby_for_signin(hhmm_to_int(cell.time_str)))
                 navigate('qrcode', {type: 'reservation', reservation: {
                     res_id: res.appointment_id,
                     revokable: true,
